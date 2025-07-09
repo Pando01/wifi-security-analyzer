@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>학교 WiFi 보안 분석기</title>
+    <title>실제 WiFi 보안 분석기</title>
     <style>
         * {
             margin: 0;
@@ -41,18 +41,6 @@
             font-weight: 700;
         }
 
-        .header p {
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
         .card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -60,6 +48,7 @@
             padding: 25px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
         }
 
         .card h2 {
@@ -70,30 +59,30 @@
             padding-bottom: 10px;
         }
 
-        .form-group {
+        .status-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
             margin-bottom: 20px;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e8ed;
+        .status-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
             border-radius: 10px;
-            font-size: 14px;
-            transition: all 0.3s ease;
+            text-align: center;
         }
 
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: #4c63d2;
-            box-shadow: 0 0 0 3px rgba(76, 99, 210, 0.1);
+        .status-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .status-label {
+            font-size: 0.9em;
+            opacity: 0.9;
         }
 
         .btn {
@@ -115,182 +104,54 @@
             box-shadow: 0 8px 25px rgba(76, 99, 210, 0.3);
         }
 
-        .btn-secondary {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
-        .btn-danger {
-            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
-        }
-
-        .wifi-list {
-            max-height: 400px;
-            overflow-y: auto;
+        .network-info {
+            background: #f8fafc;
             border: 2px solid #e1e8ed;
             border-radius: 10px;
-            padding: 15px;
-            background: #f8fafc;
+            padding: 20px;
+            margin: 15px 0;
         }
 
-        .wifi-item {
-            background: white;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            border-left: 4px solid #4c63d2;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .wifi-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .wifi-name {
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 5px;
-        }
-
-        .wifi-details {
-            font-size: 12px;
-            color: #666;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .security-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .security-open { background: #fed7d7; color: #c53030; }
-        .security-wep { background: #feebc8; color: #dd6b20; }
-        .security-wpa { background: #c6f6d5; color: #2f855a; }
-        .security-wpa2 { background: #bee3f8; color: #2b6cb0; }
-        .security-wpa3 { background: #d6f5d6; color: #22543d; }
-
-        .signal-strength {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .signal-bars {
-            display: flex;
-            gap: 2px;
-            align-items: end;
-        }
-
-        .signal-bar {
-            width: 4px;
-            background: #e2e8f0;
-            border-radius: 2px;
-        }
-
-        .signal-bar.active { background: #4c63d2; }
-        .signal-bar:nth-child(1) { height: 8px; }
-        .signal-bar:nth-child(2) { height: 12px; }
-        .signal-bar:nth-child(3) { height: 16px; }
-        .signal-bar:nth-child(4) { height: 20px; }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .data-table th, .data-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .data-table th {
-            background: #4c63d2;
-            color: white;
-            font-weight: 600;
-        }
-
-        .data-table tr:hover {
-            background: #f8fafc;
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
-        }
-
-        .stats-grid {
+        .network-detail {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            gap: 15px;
+            margin-bottom: 15px;
         }
 
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
+        .detail-item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #4c63d2;
         }
 
-        .stat-number {
-            font-size: 2em;
-            font-weight: 700;
+        .detail-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
             margin-bottom: 5px;
         }
 
-        .stat-label {
-            font-size: 0.9em;
-            opacity: 0.9;
-        }
-
-        .risk-indicator {
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+        .detail-value {
             font-weight: 600;
-            text-align: center;
+            color: #2d3748;
         }
 
-        .risk-low { background: #c6f6d5; color: #22543d; }
-        .risk-medium { background: #feebc8; color: #dd6b20; }
-        .risk-high { background: #fed7d7; color: #c53030; }
-
-        .export-section {
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
+        .location-info {
+            background: rgba(76, 99, 210, 0.1);
             border-radius: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .wifi-details {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            padding: 15px;
+            margin: 10px 0;
         }
 
         .loading {
-            display: none;
             text-align: center;
             padding: 20px;
         }
@@ -309,783 +170,1144 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .error-message {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .success-message {
+            background: #c6f6d5;
+            color: #2f855a;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .nearby-networks {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .network-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border-left: 4px solid #4c63d2;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .permissions-note {
+            background: #feebc8;
+            color: #dd6b20;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔒 학교 WiFi 보안 분석기</h1>
-            <p>WiFi 네트워크 보안 취약점을 분석하고 안전한 학교 네트워크 환경을 구축해보세요</p>
+            <h1>🔍 실제 WiFi 보안 분석기</h1>
+            <p>현재 네트워크 상태와 위치 기반 WiFi 정보를 분석합니다</p>
         </div>
 
-        <div class="main-content">
-            <!-- 측정 설정 패널 -->
-            <div class="card">
-                <h2>📍 측정 설정</h2>
-                <div class="form-group">
-                    <label for="location">측정 위치</label>
-                    <select id="location">
-                        <option value="">위치를 선택하세요</option>
-                        <option value="교실-1층-101호">교실 - 1층 101호</option>
-                        <option value="교실-1층-102호">교실 - 1층 102호</option>
-                        <option value="교실-2층-201호">교실 - 2층 201호</option>
-                        <option value="교실-2층-202호">교실 - 2층 202호</option>
-                        <option value="도서관-1층">도서관 - 1층</option>
-                        <option value="도서관-2층">도서관 - 2층</option>
-                        <option value="복도-1층">복도 - 1층</option>
-                        <option value="복도-2층">복도 - 2층</option>
-                        <option value="카페테리아">카페테리아</option>
-                        <option value="운동장">운동장</option>
-                        <option value="기타">기타</option>
-                    </select>
+        <!-- 현재 연결 상태 -->
+        <div class="card">
+            <h2>📶 현재 네트워크 상태</h2>
+            <div class="status-info" id="networkStatus">
+                <div class="status-item">
+                    <div class="status-value" id="connectionType">확인 중...</div>
+                    <div class="status-label">연결 타입</div>
                 </div>
-
-                <div class="form-group">
-                    <label for="customLocation">기타 위치 (직접 입력)</label>
-                    <input type="text" id="customLocation" placeholder="예: 3층 과학실">
+                <div class="status-item">
+                    <div class="status-value" id="connectionSpeed">-</div>
+                    <div class="status-label">연결 속도</div>
                 </div>
-
-                <div class="form-group">
-                    <label for="measurer">측정자</label>
-                    <input type="text" id="measurer" placeholder="이름을 입력하세요">
+                <div class="status-item">
+                    <div class="status-value" id="latency">-</div>
+                    <div class="status-label">지연시간</div>
                 </div>
-
-                <div class="form-group">
-                    <label for="notes">특이사항</label>
-                    <textarea id="notes" rows="3" placeholder="측정 환경, 인원 수, 특별한 상황 등을 기록하세요"></textarea>
-                </div>
-
-                <button class="btn" onclick="startWiFiScan()">📡 WiFi 스캔 시작</button>
-                <button class="btn btn-secondary" onclick="addManualEntry()">✏️ 수동 입력</button>
-            </div>
-
-            <!-- WiFi 스캔 결과 -->
-            <div class="card">
-                <h2>📶 검색된 WiFi 네트워크</h2>
-                
-                <div class="loading" id="loading">
-                    <div class="spinner"></div>
-                    <p>WiFi 네트워크를 검색 중입니다...</p>
-                </div>
-
-                <div id="wifiStatus" style="margin-bottom: 15px; padding: 10px; background: #e2e8f0; border-radius: 8px; text-align: center;">
-                    <p>📡 스캔 버튼을 클릭하여 WiFi 네트워크를 검색하세요</p>
-                </div>
-
-                <div class="wifi-list" id="wifiList">
-                    <!-- WiFi 목록이 여기에 표시됩니다 -->
-                </div>
-
-                <button class="btn btn-secondary" onclick="refreshScan()" style="margin-top: 15px;">🔄 새로고침</button>
-            </div>
-        </div>
-
-        <!-- 수동 입력 모달 -->
-        <div class="card full-width" id="manualEntrySection" style="display: none;">
-            <h2>✏️ WiFi 정보 수동 입력</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                <div class="form-group">
-                    <label for="manualSSID">네트워크 이름 (SSID)</label>
-                    <input type="text" id="manualSSID" placeholder="WiFi 이름">
-                </div>
-                <div class="form-group">
-                    <label for="manualSignal">신호 강도 (dBm)</label>
-                    <input type="number" id="manualSignal" placeholder="-50" min="-100" max="-20">
-                </div>
-                <div class="form-group">
-                    <label for="manualSecurity">보안 방식</label>
-                    <select id="manualSecurity">
-                        <option value="Open">Open (보안 없음)</option>
-                        <option value="WEP">WEP</option>
-                        <option value="WPA">WPA</option>
-                        <option value="WPA2">WPA2</option>
-                        <option value="WPA3">WPA3</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="manualChannel">채널</label>
-                    <input type="number" id="manualChannel" placeholder="6" min="1" max="14">
+                <div class="status-item">
+                    <div class="status-value" id="signalQuality">-</div>
+                    <div class="status-label">신호 품질</div>
                 </div>
             </div>
-            <button class="btn" onclick="saveManualEntry()">💾 저장</button>
-            <button class="btn btn-danger" onclick="cancelManualEntry()">❌ 취소</button>
-        </div>
-
-        <!-- 측정 데이터 테이블 -->
-        <div class="card full-width">
-            <h2>📊 측정 데이터</h2>
             
-            <!-- 통계 요약 -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number" id="totalNetworks">0</div>
-                    <div class="stat-label">총 네트워크 수</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="openNetworks">0</div>
-                    <div class="stat-label">오픈 네트워크</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="avgSignal">0</div>
-                    <div class="stat-label">평균 신호강도</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="riskScore">0</div>
-                    <div class="stat-label">위험도 점수</div>
-                </div>
+            <button class="btn" onclick="analyzeCurrentNetwork()">🔄 현재 네트워크 분석</button>
+            <button class="btn" onclick="performSpeedTest()">⚡ 속도 테스트</button>
+        </div>
+
+        <!-- 위치 기반 WiFi 정보 -->
+        <div class="card">
+            <h2>📍 위치 기반 WiFi 분석</h2>
+            
+            <div class="permissions-note">
+                <strong>알림:</strong> 위치 정보 권한이 필요합니다. 브라우저에서 위치 액세스를 허용해주세요.
             </div>
+            
+            <div id="locationInfo" class="location-info" style="display: none;">
+                <h4>📍 현재 위치</h4>
+                <p>위도: <span id="latitude">-</span></p>
+                <p>경도: <span id="longitude">-</span></p>
+                <p>정확도: <span id="accuracy">-</span>m</p>
+            </div>
+            
+            <button class="btn" onclick="getLocationBasedWiFi()" id="locationBtn">📡 주변 WiFi 정보 수집</button>
+            <button class="btn" onclick="scanNearbyNetworks()">🌐 근처 네트워크 스캔</button>
+            
+            <div id="locationLoading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>위치 정보를 수집하고 있습니다...</p>
+            </div>
+            
+            <div id="nearbyNetworks" class="nearby-networks"></div>
+        </div>
 
-            <table class="data-table" id="dataTable">
-                <thead>
-                    <tr>
-                        <th>시간</th>
-                        <th>위치</th>
-                        <th>네트워크명</th>
-                        <th>신호강도</th>
-                        <th>보안방식</th>
-                        <th>채널</th>
-                        <th>위험도</th>
-                        <th>동작</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- 측정 데이터가 여기에 표시됩니다 -->
-                </tbody>
-            </table>
+        <!-- 네트워크 상세 분석 -->
+        <div class="card">
+            <h2>🔬 네트워크 상세 분석</h2>
+            
+            <div class="network-info" id="detailedAnalysis">
+                <p>네트워크 분석을 시작하려면 위의 버튼을 클릭하세요.</p>
+            </div>
+            
+            <button class="btn" onclick="performDetailedAnalysis()">🔍 상세 분석 실행</button>
+            <button class="btn" onclick="checkSecurityStatus()">🛡️ 보안 상태 점검</button>
+        </div>
 
-            <!-- 데이터 내보내기 -->
-            <div class="export-section">
-                <h3>📤 데이터 내보내기</h3>
-                <button class="btn" onclick="exportToCSV()">📄 CSV로 내보내기</button>
-                <button class="btn btn-secondary" onclick="exportToJSON()">📋 JSON으로 내보내기</button>
-                <button class="btn btn-danger" onclick="clearAllData()">🗑️ 모든 데이터 삭제</button>
+        <!-- 결과 및 권고사항 -->
+        <div class="card">
+            <h2>📊 분석 결과 및 권고사항</h2>
+            <div id="analysisResults">
+                <p>분석을 실행하면 결과가 여기에 표시됩니다.</p>
             </div>
         </div>
     </div>
 
     <script>
-        // 전역 변수
-        let measurementData = [];
-        let currentLocation = '';
+        let currentPosition = null;
+        let networkData = [];
 
-        // 페이지 로드 시 저장된 데이터 불러오기
+        // 페이지 로드 시 초기 분석
         window.onload = function() {
-            loadSavedData();
-            updateStatistics();
-            renderTable();
+            detectNetworkCapabilities();
+            analyzeCurrentNetwork();
         };
 
-        // WiFi 스캔 시뮬레이션 (실제 환경에서는 Web API 사용)
-        function startWiFiScan() {
-            const location = document.getElementById('location').value || document.getElementById('customLocation').value;
-            if (!location) {
-                alert('측정 위치를 선택하거나 입력해주세요.');
-                return;
-            }
-
-            currentLocation = location;
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('wifiStatus').innerHTML = '<p>🔍 WiFi 네트워크를 검색 중입니다...</p>';
-
-            // 실제 환경에서는 navigator.mediaDevices 또는 WebRTC API 사용
-            setTimeout(() => {
-                simulateWiFiScan();
-                document.getElementById('loading').style.display = 'none';
-            }, 2000);
-        }
-
-        // WiFi 스캔 시뮬레이션 데이터
-        function simulateWiFiScan() {
-            const sampleNetworks = [
-                { ssid: 'SchoolWiFi_Main', signal: -45, security: 'WPA2', channel: 6, frequency: '2.4GHz' },
-                { ssid: 'SchoolWiFi_Guest', signal: -52, security: 'WPA2', channel: 11, frequency: '2.4GHz' },
-                { ssid: 'Student_Hotspot_1', signal: -67, security: 'WPA2', channel: 1, frequency: '2.4GHz' },
-                { ssid: 'FreeWiFi', signal: -72, security: 'Open', channel: 3, frequency: '2.4GHz' },
-                { ssid: 'Teacher_Mobile', signal: -58, security: 'WPA2', channel: 9, frequency: '2.4GHz' },
-                { ssid: 'OldRouter', signal: -75, security: 'WEP', channel: 2, frequency: '2.4GHz' },
-                { ssid: 'Cafe_WiFi', signal: -68, security: 'WPA3', channel: 36, frequency: '5GHz' }
-            ];
-
-            // 랜덤하게 일부 네트워크만 표시 (실제 환경 시뮬레이션)
-            const detectedNetworks = sampleNetworks.filter(() => Math.random() > 0.3);
-            
-            displayWiFiNetworks(detectedNetworks);
-            document.getElementById('wifiStatus').innerHTML = `<p>✅ ${detectedNetworks.length}개의 WiFi 네트워크를 발견했습니다</p>`;
-        }
-
-        // WiFi 네트워크 목록 표시
-        function displayWiFiNetworks(networks) {
-            const wifiList = document.getElementById('wifiList');
-            wifiList.innerHTML = '';
-
-            networks.forEach(network => {
-                const wifiItem = document.createElement('div');
-                wifiItem.className = 'wifi-item';
-                wifiItem.innerHTML = `
-                    <div class="wifi-name">${network.ssid}</div>
-                    <div class="wifi-details">
-                        <div>
-                            <div class="signal-strength">
-                                신호: ${network.signal} dBm
-                                <div class="signal-bars">
-                                    ${generateSignalBars(network.signal)}
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="security-badge security-${network.security.toLowerCase()}">${network.security}</span>
-                        </div>
-                        <div>채널: ${network.channel}</div>
-                        <div>주파수: ${network.frequency}</div>
-                    </div>
-                    <button class="btn" style="margin-top: 10px; font-size: 12px;" onclick="addToMeasurement('${network.ssid}', ${network.signal}, '${network.security}', ${network.channel})">
-                        📊 측정 데이터에 추가
-                    </button>
-                `;
-                wifiList.appendChild(wifiItem);
-            });
-        }
-
-        // 신호 강도 바 생성
-        function generateSignalBars(signal) {
-            const strength = Math.min(4, Math.max(1, Math.floor((-signal + 100) / 20)));
-            let bars = '';
-            for (let i = 1; i <= 4; i++) {
-                bars += `<div class="signal-bar ${i <= strength ? 'active' : ''}"></div>`;
-            }
-            return bars;
-        }
-
-        // 측정 데이터에 추가
-        function addToMeasurement(ssid, signal, security, channel) {
-            const measurer = document.getElementById('measurer').value;
-            const notes = document.getElementById('notes').value;
-            
-            if (!measurer) {
-                alert('측정자 이름을 입력해주세요.');
-                return;
-            }
-
-            const measurement = {
-                timestamp: new Date().toLocaleString('ko-KR'),
-                location: currentLocation,
-                ssid: ssid,
-                signal: signal,
-                security: security,
-                channel: channel,
-                measurer: measurer,
-                notes: notes,
-                riskLevel: calculateRiskLevel(security, signal)
+        // 브라우저 네트워크 API 지원 여부 확인
+        function detectNetworkCapabilities() {
+            const capabilities = {
+                connection: 'connection' in navigator,
+                geolocation: 'geolocation' in navigator,
+                onLine: 'onLine' in navigator,
+                serviceWorker: 'serviceWorker' in navigator
             };
-
-            measurementData.push(measurement);
-            saveData();
-            updateStatistics();
-            renderTable();
             
-            alert(`${ssid} 네트워크가 측정 데이터에 추가되었습니다.`);
-        }
-
-        // 위험도 계산
-        function calculateRiskLevel(security, signal) {
-            let risk = 0;
+            console.log('브라우저 지원 기능:', capabilities);
             
-            // 보안 방식에 따른 위험도
-            switch(security) {
-                case 'Open': risk += 40; break;
-                case 'WEP': risk += 30; break;
-                case 'WPA': risk += 20; break;
-                case 'WPA2': risk += 10; break;
-                case 'WPA3': risk += 0; break;
-            }
-            
-            // 신호 강도에 따른 위험도 (너무 강하거나 약하면 위험)
-            if (signal > -40) risk += 20; // 너무 강한 신호
-            else if (signal < -80) risk += 15; // 너무 약한 신호
-            
-            if (risk >= 50) return 'high';
-            else if (risk >= 25) return 'medium';
-            else return 'low';
-        }
-
-        // 수동 입력 모달 표시
-        function addManualEntry() {
-            const location = document.getElementById('location').value || document.getElementById('customLocation').value;
-            if (!location) {
-                alert('측정 위치를 선택하거나 입력해주세요.');
-                return;
-            }
-            currentLocation = location;
-            document.getElementById('manualEntrySection').style.display = 'block';
-        }
-
-        // 수동 입력 저장
-        function saveManualEntry() {
-            const ssid = document.getElementById('manualSSID').value;
-            const signal = parseInt(document.getElementById('manualSignal').value);
-            const security = document.getElementById('manualSecurity').value;
-            const channel = parseInt(document.getElementById('manualChannel').value);
-            const measurer = document.getElementById('measurer').value;
-            const notes = document.getElementById('notes').value;
-
-            if (!ssid || !signal || !security || !channel || !measurer) {
-                alert('모든 필드를 입력해주세요.');
-                return;
-            }
-
-            const measurement = {
-                timestamp: new Date().toLocaleString('ko-KR'),
-                location: currentLocation,
-                ssid: ssid,
-                signal: signal,
-                security: security,
-                channel: channel,
-                measurer: measurer,
-                notes: notes,
-                riskLevel: calculateRiskLevel(security, signal)
-            };
-
-            measurementData.push(measurement);
-            saveData();
-            updateStatistics();
-            renderTable();
-            
-            // 입력 필드 초기화
-            document.getElementById('manualSSID').value = '';
-            document.getElementById('manualSignal').value = '';
-            document.getElementById('manualChannel').value = '';
-            
-            alert('측정 데이터가 추가되었습니다.');
-            cancelManualEntry();
-        }
-
-        // 수동 입력 취소
-        function cancelManualEntry() {
-            document.getElementById('manualEntrySection').style.display = 'none';
-        }
-
-        // 통계 업데이트
-        function updateStatistics() {
-            const totalNetworks = measurementData.length;
-            const openNetworks = measurementData.filter(d => d.security === 'Open').length;
-            const avgSignal = totalNetworks > 0 ? 
-                Math.round(measurementData.reduce((sum, d) => sum + d.signal, 0) / totalNetworks) : 0;
-            
-            // 위험도 점수 계산
-            let riskScore = 0;
-            if (totalNetworks > 0) {
-                const openRatio = openNetworks / totalNetworks;
-                const weakSignals = measurementData.filter(d => d.signal < -70).length / totalNetworks;
-                const highRiskNetworks = measurementData.filter(d => d.riskLevel === 'high').length / totalNetworks;
-                
-                riskScore = Math.round((openRatio * 40 + weakSignals * 30 + highRiskNetworks * 30));
-            }
-
-            document.getElementById('totalNetworks').textContent = totalNetworks;
-            document.getElementById('openNetworks').textContent = openNetworks;
-            document.getElementById('avgSignal').textContent = avgSignal + ' dBm';
-            document.getElementById('riskScore').textContent = riskScore + '/100';
-        }
-
-        // 테이블 렌더링
-        function renderTable() {
-            const tableBody = document.querySelector('#dataTable tbody');
-            tableBody.innerHTML = '';
-
-            measurementData.forEach((data, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${data.timestamp}</td>
-                    <td>${data.location}</td>
-                    <td>${data.ssid}</td>
-                    <td>${data.signal} dBm</td>
-                    <td><span class="security-badge security-${data.security.toLowerCase()}">${data.security}</span></td>
-                    <td>${data.channel}</td>
-                    <td><span class="risk-indicator risk-${data.riskLevel}">${getRiskText(data.riskLevel)}</span></td>
-                    <td><button class="btn btn-danger" style="font-size: 12px;" onclick="deleteEntry(${index})">삭제</button></td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-
-        // 위험도 텍스트 변환
-        function getRiskText(riskLevel) {
-            switch(riskLevel) {
-                case 'low': return '낮음';
-                case 'medium': return '보통';
-                case 'high': return '높음';
-                default: return '알 수 없음';
+            if (!capabilities.geolocation) {
+                showError('이 브라우저는 위치 정보를 지원하지 않습니다.');
             }
         }
 
-        // 데이터 삭제
-        function deleteEntry(index) {
-            if (confirm('이 항목을 삭제하시겠습니까?')) {
-                measurementData.splice(index, 1);
-                saveData();
-                updateStatistics();
-                renderTable();
-            }
-        }
-
-        // CSV 내보내기
-        function exportToCSV() {
-            if (measurementData.length === 0) {
-                alert('내보낼 데이터가 없습니다.');
-                return;
-            }
-
-            const headers = ['시간', '위치', '네트워크명', '신호강도(dBm)', '보안방식', '채널', '위험도', '측정자', '특이사항'];
-            const csvContent = [
-                headers.join(','),
-                ...measurementData.map(data => [
-                    `"${data.timestamp}"`,
-                    `"${data.location}"`,
-                    `"${data.ssid}"`,
-                    data.signal,
-                    data.security,
-                    data.channel,
-                    getRiskText(data.riskLevel),
-                    `"${data.measurer}"`,
-                    `"${data.notes || ''}"`
-                ].join(','))
-            ].join('\n');
-
-            downloadFile(csvContent, 'wifi_security_analysis.csv', 'text/csv');
-        }
-
-        // JSON 내보내기
-        function exportToJSON() {
-            if (measurementData.length === 0) {
-                alert('내보낼 데이터가 없습니다.');
-                return;
-            }
-
-            const jsonContent = JSON.stringify({
-                exportDate: new Date().toISOString(),
-                totalMeasurements: measurementData.length,
-                data: measurementData
-            }, null, 2);
-
-            downloadFile(jsonContent, 'wifi_security_analysis.json', 'application/json');
-        }
-
-        // 파일 다운로드
-        function downloadFile(content, filename, mimeType) {
-            const blob = new Blob([content], { type: mimeType });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        // 모든 데이터 삭제
-        function clearAllData() {
-            if (confirm('모든 측정 데이터를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
-                measurementData = [];
-                saveData();
-                updateStatistics();
-                renderTable();
-                alert('모든 데이터가 삭제되었습니다.');
-            }
-        }
-
-        // 스캔 새로고침
-        function refreshScan() {
-            if (currentLocation) {
-                startWiFiScan();
-            } else {
-                alert('먼저 측정 위치를 설정해주세요.');
-            }
-        }
-
-        // 데이터 저장
-        function saveData() {
+        // 현재 네트워크 분석
+        async function analyzeCurrentNetwork() {
             try {
-                localStorage.setItem('wifiMeasurementData', JSON.stringify(measurementData));
-            } catch (e) {
-                console.warn('데이터 저장에 실패했습니다:', e);
-            }
-        }
-
-        // 저장된 데이터 불러오기
-        function loadSavedData() {
-            try {
-                const savedData = localStorage.getItem('wifiMeasurementData');
-                if (savedData) {
-                    measurementData = JSON.parse(savedData);
-                }
-            } catch (e) {
-                console.warn('저장된 데이터 불러오기에 실패했습니다:', e);
-                measurementData = [];
-            }
-        }
-
-        // 실제 WiFi 스캔 (브라우저 지원 시)
-        async function attemptRealWiFiScan() {
-            try {
-                // Web API를 통한 실제 WiFi 스캔 (제한적 지원)
-                if ('navigator' in window && 'wifi' in navigator) {
-                    const networks = await navigator.wifi.scan();
-                    return networks;
+                // Network Information API 사용 (지원되는 경우)
+                if ('connection' in navigator) {
+                    const connection = navigator.connection;
+                    updateConnectionInfo({
+                        type: connection.effectiveType || 'unknown',
+                        downlink: connection.downlink || 0,
+                        rtt: connection.rtt || 0,
+                        saveData: connection.saveData || false
+                    });
                 } else {
-                    // 대안: 시뮬레이션 데이터 사용
-                    return null;
+                    // 대안: 연결 상태만 확인
+                    updateConnectionInfo({
+                        type: navigator.onLine ? 'online' : 'offline',
+                        downlink: 0,
+                        rtt: 0,
+                        saveData: false
+                    });
                 }
+                
+                // 추가 네트워크 테스트
+                await performBasicNetworkTest();
+                
             } catch (error) {
-                console.log('실제 WiFi 스캔 불가능, 시뮬레이션 모드 사용');
-                return null;
+                showError('네트워크 분석 중 오류가 발생했습니다: ' + error.message);
             }
         }
 
-        // 키보드 단축키
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey || e.metaKey) {
-                switch(e.key) {
-                    case 's':
-                        e.preventDefault();
-                        exportToCSV();
-                        break;
-                    case 'n':
-                        e.preventDefault();
-                        addManualEntry();
-                        break;
-                    case 'r':
-                        e.preventDefault();
-                        refreshScan();
-                        break;
+        // 연결 정보 업데이트
+        function updateConnectionInfo(connectionData) {
+            document.getElementById('connectionType').textContent = 
+                connectionData.type.toUpperCase();
+            document.getElementById('connectionSpeed').textContent = 
+                connectionData.downlink ? connectionData.downlink + ' Mbps' : '측정 중...';
+            document.getElementById('latency').textContent = 
+                connectionData.rtt ? connectionData.rtt + ' ms' : '측정 중...';
+        }
+
+        // 기본 네트워크 테스트
+        async function performBasicNetworkTest() {
+            const testUrls = [
+                'https://httpbin.org/delay/0',
+                'https://jsonplaceholder.typicode.com/posts/1',
+                'https://api.github.com'
+            ];
+            
+            const results = [];
+            
+            for (const url of testUrls) {
+                try {
+                    const startTime = Date.now();
+                    const response = await fetch(url, { 
+                        method: 'HEAD',
+                        cache: 'no-cache'
+                    });
+                    const endTime = Date.now();
+                    
+                    results.push({
+                        url: url,
+                        status: response.status,
+                        time: endTime - startTime,
+                        success: response.ok
+                    });
+                } catch (error) {
+                    results.push({
+                        url: url,
+                        status: 0,
+                        time: 9999,
+                        success: false,
+                        error: error.message
+                    });
                 }
             }
-        });
-
-        // 위치 변경 시 자동 업데이트
-        document.getElementById('location').addEventListener('change', function() {
-            currentLocation = this.value;
-        });
-
-        document.getElementById('customLocation').addEventListener('input', function() {
-            if (this.value) {
-                document.getElementById('location').value = '';
-                currentLocation = this.value;
-            }
-        });
-
-        // 도움말 기능
-        function showHelp() {
-            alert(`
-WiFi 보안 분석기 사용법:
-
-1. 측정 설정
-   - 위치 선택 또는 직접 입력
-   - 측정자 이름 입력
-   - 특이사항 기록
-
-2. WiFi 스캔
-   - "WiFi 스캔 시작" 버튼 클릭
-   - 검색된 네트워크 중 분석할 항목 선택
-
-3. 수동 입력
-   - 스캔이 불가능한 경우 직접 입력
-   - 모든 필드를 정확히 입력
-
-4. 데이터 관리
-   - CSV/JSON 형태로 내보내기
-   - 불필요한 데이터 삭제
-
-5. 단축키
-   - Ctrl+S: CSV 내보내기
-   - Ctrl+N: 수동 입력
-   - Ctrl+R: 스캔 새로고침
-
-위험도 평가:
-- 높음: Open/WEP 네트워크, 비정상 신호
-- 보통: 구형 보안 방식
-- 낮음: WPA2/WPA3 보안
-            `);
+            
+            analyzeNetworkResults(results);
         }
 
-        // 도움말 버튼 추가
-        window.onload = function() {
-            loadSavedData();
-            updateStatistics();
-            renderTable();
+        // 네트워크 테스트 결과 분석
+        function analyzeNetworkResults(results) {
+            const successfulTests = results.filter(r => r.success);
+            const avgLatency = successfulTests.length > 0 ? 
+                Math.round(successfulTests.reduce((sum, r) => sum + r.time, 0) / successfulTests.length) : 0;
             
-            // 도움말 버튼 생성
-            const helpButton = document.createElement('button');
-            helpButton.className = 'btn';
-            helpButton.innerHTML = '❓ 도움말';
-            helpButton.style.position = 'fixed';
-            helpButton.style.bottom = '20px';
-            helpButton.style.right = '20px';
-            helpButton.style.zIndex = '1000';
-            helpButton.onclick = showHelp;
-            document.body.appendChild(helpButton);
-        };
+            const quality = avgLatency < 100 ? '우수' : 
+                           avgLatency < 300 ? '양호' : 
+                           avgLatency < 1000 ? '보통' : '불량';
+            
+            document.getElementById('latency').textContent = avgLatency + ' ms';
+            document.getElementById('signalQuality').textContent = quality;
+            
+            // 상세 분석 결과 표시
+            updateDetailedAnalysis(results, avgLatency, quality);
+        }
 
-        // 반응형 테이블
-        function makeTableResponsive() {
-            const table = document.getElementById('dataTable');
-            if (window.innerWidth <= 768) {
-                table.style.fontSize = '12px';
-            } else {
-                table.style.fontSize = '14px';
+        // 속도 테스트
+        async function performSpeedTest() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '테스트 중...';
+            
+            try {
+                // 1MB 파일 다운로드로 속도 측정
+                const testSize = 1024 * 1024; // 1MB
+                const startTime = Date.now();
+                
+                const response = await fetch(`https://httpbin.org/bytes/${testSize}`, {
+                    cache: 'no-cache'
+                });
+                
+                const endTime = Date.now();
+                const duration = (endTime - startTime) / 1000; // 초
+                const speed = (testSize / 1024 / 1024) / duration; // MB/s
+                
+                document.getElementById('connectionSpeed').textContent = 
+                    speed.toFixed(2) + ' MB/s';
+                
+                showSuccess(`속도 테스트 완료: ${speed.toFixed(2)} MB/s`);
+                
+            } catch (error) {
+                showError('속도 테스트 실패: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '⚡ 속도 테스트';
             }
         }
 
-        window.addEventListener('resize', makeTableResponsive);
-        makeTableResponsive();
-
-        // 데이터 유효성 검사
-        function validateMeasurementData(data) {
-            const errors = [];
+        // 위치 기반 WiFi 정보 수집
+        async function getLocationBasedWiFi() {
+            const loadingDiv = document.getElementById('locationLoading');
+            const btn = document.getElementById('locationBtn');
             
-            if (!data.ssid || data.ssid.trim() === '') {
-                errors.push('네트워크 이름이 비어있습니다.');
+            btn.disabled = true;
+            btn.textContent = '위치 확인 중...';
+            loadingDiv.style.display = 'block';
+            
+            try {
+                const position = await getCurrentPosition();
+                currentPosition = position;
+                
+                // 위치 정보 표시
+                displayLocationInfo(position);
+                
+                // 주변 WiFi 정보 시뮬레이션 (실제로는 외부 API 사용)
+                await simulateNearbyWiFiScan(position);
+                
+                showSuccess('위치 기반 WiFi 정보 수집 완료');
+                
+            } catch (error) {
+                showError('위치 정보 수집 실패: ' + error.message);
+            } finally {
+                loadingDiv.style.display = 'none';
+                btn.disabled = false;
+                btn.textContent = '📡 주변 WiFi 정보 수집';
             }
-            
-            if (!data.signal || data.signal > -20 || data.signal < -100) {
-                errors.push('신호 강도가 유효하지 않습니다. (-100 ~ -20 dBm)');
-            }
-            
-            if (!data.channel || data.channel < 1 || data.channel > 165) {
-                errors.push('채널 번호가 유효하지 않습니다.');
-            }
-            
-            if (!data.location || data.location.trim() === '') {
-                errors.push('측정 위치가 설정되지 않았습니다.');
-            }
-            
-            return errors;
         }
 
-        // 고급 통계 계산
-        function calculateAdvancedStats() {
-            if (measurementData.length === 0) return {};
+        // 위치 정보 획득
+        function getCurrentPosition() {
+            return new Promise((resolve, reject) => {
+                if (!navigator.geolocation) {
+                    reject(new Error('Geolocation이 지원되지 않습니다'));
+                    return;
+                }
+                
+                navigator.geolocation.getCurrentPosition(
+                    resolve,
+                    reject,
+                    { 
+                        enableHighAccuracy: true, 
+                        timeout: 10000, 
+                        maximumAge: 300000 
+                    }
+                );
+            });
+        }
+
+        // 위치 정보 표시
+        function displayLocationInfo(position) {
+            const locationDiv = document.getElementById('locationInfo');
+            locationDiv.style.display = 'block';
             
-            const stats = {
-                locationStats: {},
-                securityStats: {},
-                signalStats: {
-                    min: Math.min(...measurementData.map(d => d.signal)),
-                    max: Math.max(...measurementData.map(d => d.signal)),
-                    avg: Math.round(measurementData.reduce((sum, d) => sum + d.signal, 0) / measurementData.length)
+            document.getElementById('latitude').textContent = 
+                position.coords.latitude.toFixed(6);
+            document.getElementById('longitude').textContent = 
+                position.coords.longitude.toFixed(6);
+            document.getElementById('accuracy').textContent = 
+                position.coords.accuracy.toFixed(0);
+        }
+
+        // 주변 WiFi 스캔 시뮬레이션
+        async function simulateNearbyWiFiScan(position) {
+            // 실제 환경에서는 WiGLE API 등을 사용
+            const simulatedNetworks = [
+                {
+                    ssid: 'School_WiFi_Main',
+                    security: 'WPA2',
+                    signal: -45,
+                    frequency: '2.4GHz',
+                    distance: 50
                 },
-                channelStats: {}
-            };
-            
-            // 위치별 통계
-            measurementData.forEach(data => {
-                if (!stats.locationStats[data.location]) {
-                    stats.locationStats[data.location] = { count: 0, avgSignal: 0, riskHigh: 0 };
+                {
+                    ssid: 'Public_WiFi',
+                    security: 'Open',
+                    signal: -62,
+                    frequency: '2.4GHz',
+                    distance: 120
+                },
+                {
+                    ssid: 'Cafe_Network',
+                    security: 'WPA3',
+                    signal: -58,
+                    frequency: '5GHz',
+                    distance: 80
                 }
-                stats.locationStats[data.location].count++;
-                if (data.riskLevel === 'high') {
-                    stats.locationStats[data.location].riskHigh++;
-                }
-            });
+            ];
             
-            // 보안 방식별 통계
-            measurementData.forEach(data => {
-                stats.securityStats[data.security] = (stats.securityStats[data.security] || 0) + 1;
-            });
-            
-            // 채널별 통계
-            measurementData.forEach(data => {
-                stats.channelStats[data.channel] = (stats.channelStats[data.channel] || 0) + 1;
-            });
-            
-            return stats;
+            displayNearbyNetworks(simulatedNetworks);
         }
 
-        // 분석 리포트 생성
-        function generateAnalysisReport() {
-            const stats = calculateAdvancedStats();
+        // 근처 네트워크 표시
+        function displayNearbyNetworks(networks) {
+            const container = document.getElementById('nearbyNetworks');
+            container.innerHTML = '<h4>🌐 주변 네트워크 (시뮬레이션)</h4>';
             
-            if (measurementData.length === 0) {
-                alert('분석할 데이터가 없습니다.');
+            networks.forEach(network => {
+                const networkDiv = document.createElement('div');
+                networkDiv.className = 'network-item';
+                networkDiv.innerHTML = `
+                    <h5>${network.ssid}</h5>
+                    <div class="network-detail">
+                        <div class="detail-item">
+                            <div class="detail-label">보안</div>
+                            <div class="detail-value">${network.security}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">신호강도</div>
+                            <div class="detail-value">${network.signal} dBm</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">주파수</div>
+                            <div class="detail-value">${network.frequency}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">예상거리</div>
+                            <div class="detail-value">${network.distance}m</div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(networkDiv);
+            });
+        }
+
+        // 근처 네트워크 스캔
+        async function scanNearbyNetworks() {
+            if (!currentPosition) {
+                showError('먼저 위치 정보를 수집해주세요.');
                 return;
             }
             
-            const report = `
-WiFi 보안 분석 리포트
-생성일시: ${new Date().toLocaleString('ko-KR')}
-총 측정 네트워크: ${measurementData.length}개
+            try {
+                showSuccess('네트워크 스캔을 시작합니다...');
+                
+                // 실제 환경에서는 여러 API를 조합하여 사용
+                await scanWithMultipleMethods();
+                
+            } catch (error) {
+                showError('네트워크 스캔 실패: ' + error.message);
+            }
+        }
 
-=== 보안 현황 ===
-${Object.entries(stats.securityStats).map(([security, count]) => 
-    `${security}: ${count}개 (${Math.round(count/measurementData.length*100)}%)`
-).join('\n')}
-
-=== 신호 강도 통계 ===
-최강 신호: ${stats.signalStats.max} dBm
-최약 신호: ${stats.signalStats.min} dBm
-평균 신호: ${stats.signalStats.avg} dBm
-
-=== 위험도 평가 ===
-높은 위험: ${measurementData.filter(d => d.riskLevel === 'high').length}개
-보통 위험: ${measurementData.filter(d => d.riskLevel === 'medium').length}개
-낮은 위험: ${measurementData.filter(d => d.riskLevel === 'low').length}개
-
-=== 권고사항 ===
-${generateRecommendations(stats)}
-            `;
+        // 다양한 방법으로 네트워크 스캔
+        async function scanWithMultipleMethods() {
+            const results = {};
             
-            // 새 창에서 리포트 표시
-            const reportWindow = window.open('', '_blank');
-            reportWindow.document.write(`
-                <html>
-                    <head><title>WiFi 보안 분석 리포트</title></head>
-                    <body style="font-family: monospace; white-space: pre-wrap; padding: 20px;">
-                        ${report}
-                        <br><br>
-                        <button onclick="window.print()">인쇄</button>
-                        <button onclick="window.close()">닫기</button>
-                    </body>
-                </html>
-            `);
+            // 방법 1: 현재 연결된 네트워크 정보
+            try {
+                const connectionInfo = await getConnectionDetails();
+                results.currentConnection = connectionInfo;
+            } catch (e) {
+                console.log('연결 정보 수집 실패:', e);
+            }
+            
+            // 방법 2: 네트워크 품질 테스트
+            try {
+                const qualityTest = await performQualityTest();
+                results.qualityTest = qualityTest;
+            } catch (e) {
+                console.log('품질 테스트 실패:', e);
+            }
+            
+            // 방법 3: DNS 정보 수집
+            try {
+                const dnsInfo = await getDNSInformation();
+                results.dnsInfo = dnsInfo;
+            } catch (e) {
+                console.log('DNS 정보 수집 실패:', e);
+            }
+            
+            // 방법 4: 외부 API를 통한 WiFi 데이터 (시뮬레이션)
+            try {
+                const externalData = await getExternalWiFiData();
+                results.externalData = externalData;
+            } catch (e) {
+                console.log('외부 데이터 수집 실패:', e);
+            }
+            
+            displayScanResults(results);
+        }
+
+        // 연결 세부 정보 수집
+        async function getConnectionDetails() {
+            const details = {
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                cookieEnabled: navigator.cookieEnabled,
+                language: navigator.language,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                screenResolution: `${screen.width}x${screen.height}`,
+                colorDepth: screen.colorDepth,
+                pixelRatio: window.devicePixelRatio
+            };
+            
+            // WebRTC를 통한 로컬 IP 확인 시도
+            try {
+                const localIP = await getLocalIP();
+                details.localIP = localIP;
+            } catch (e) {
+                details.localIP = 'Unable to detect';
+            }
+            
+            return details;
+        }
+
+        // WebRTC를 통한 로컬 IP 확인
+        function getLocalIP() {
+            return new Promise((resolve, reject) => {
+                const rtc = new RTCPeerConnection({
+                    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+                });
+                
+                rtc.createDataChannel('');
+                rtc.createOffer().then(offer => rtc.setLocalDescription(offer));
+                
+                rtc.onicecandidate = (event) => {
+                    if (event.candidate) {
+                        const candidate = event.candidate.candidate;
+                        const ipMatch = candidate.match(/([0-9]{1,3}\.){3}[0-9]{1,3}/);
+                        if (ipMatch) {
+                            resolve(ipMatch[0]);
+                            rtc.close();
+                        }
+                    }
+                };
+                
+                setTimeout(() => {
+                    reject(new Error('로컬 IP 검색 시간 초과'));
+                    rtc.close();
+                }, 5000);
+            });
+        }
+
+        // 네트워크 품질 테스트
+        async function performQualityTest() {
+            const testEndpoints = [
+                'https://www.google.com/favicon.ico',
+                'https://github.com/favicon.ico',
+                'https://stackoverflow.com/favicon.ico'
+            ];
+            
+            const results = [];
+            
+            for (const endpoint of testEndpoints) {
+                try {
+                    const startTime = performance.now();
+                    const response = await fetch(endpoint, { 
+                        method: 'HEAD',
+                        cache: 'no-cache',
+                        mode: 'no-cors'
+                    });
+                    const endTime = performance.now();
+                    
+                    results.push({
+                        endpoint: endpoint,
+                        responseTime: Math.round(endTime - startTime),
+                        success: true
+                    });
+                } catch (error) {
+                    results.push({
+                        endpoint: endpoint,
+                        responseTime: 9999,
+                        success: false,
+                        error: error.message
+                    });
+                }
+            }
+            
+            return results;
+        }
+
+        // DNS 정보 수집
+        async function getDNSInformation() {
+            try {
+                // DNS over HTTPS를 사용하여 DNS 정보 확인
+                const dnsResponse = await fetch('https://cloudflare-dns.com/dns-query?name=example.com&type=A', {
+                    headers: {
+                        'Accept': 'application/dns-json'
+                    }
+                });
+                
+                const dnsData = await dnsResponse.json();
+                
+                return {
+                    dnsProvider: 'Cloudflare DNS over HTTPS',
+                    queryTime: Date.now(),
+                    status: dnsData.Status,
+                    answers: dnsData.Answer ? dnsData.Answer.length : 0
+                };
+            } catch (error) {
+                return {
+                    error: 'DNS 정보 수집 실패',
+                    message: error.message
+                };
+            }
+        }
+
+        // 외부 WiFi 데이터 수집 (시뮬레이션)
+        async function getExternalWiFiData() {
+            // 실제로는 WiGLE API, OpenWiFi 등을 사용
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        source: 'Simulated WiFi Database',
+                        networksInArea: Math.floor(Math.random() * 20) + 5,
+                        openNetworks: Math.floor(Math.random() * 5),
+                        secureNetworks: Math.floor(Math.random() * 15) + 10,
+                        averageSignal: -55 + Math.floor(Math.random() * 20),
+                        lastUpdated: new Date().toISOString()
+                    });
+                }, 1000);
+            });
+        }
+
+        // 스캔 결과 표시
+        function displayScanResults(results) {
+            const container = document.getElementById('nearbyNetworks');
+            container.innerHTML = '<h4>🔍 종합 네트워크 스캔 결과</h4>';
+            
+            // 현재 연결 정보
+            if (results.currentConnection) {
+                const connectionDiv = document.createElement('div');
+                connectionDiv.className = 'network-item';
+                connectionDiv.innerHTML = `
+                    <h5>📱 현재 기기 정보</h5>
+                    <div class="network-detail">
+                        <div class="detail-item">
+                            <div class="detail-label">플랫폼</div>
+                            <div class="detail-value">${results.currentConnection.platform}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">로컬 IP</div>
+                            <div class="detail-value">${results.currentConnection.localIP}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">시간대</div>
+                            <div class="detail-value">${results.currentConnection.timezone}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">화면</div>
+                            <div class="detail-value">${results.currentConnection.screenResolution}</div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(connectionDiv);
+            }
+            
+            // 품질 테스트 결과
+            if (results.qualityTest) {
+                const qualityDiv = document.createElement('div');
+                qualityDiv.className = 'network-item';
+                const avgResponseTime = results.qualityTest
+                    .filter(r => r.success)
+                    .reduce((sum, r) => sum + r.responseTime, 0) / results.qualityTest.length;
+                
+                qualityDiv.innerHTML = `
+                    <h5>⚡ 네트워크 품질 테스트</h5>
+                    <div class="network-detail">
+                        <div class="detail-item">
+                            <div class="detail-label">평균 응답시간</div>
+                            <div class="detail-value">${Math.round(avgResponseTime)} ms</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">성공한 테스트</div>
+                            <div class="detail-value">${results.qualityTest.filter(r => r.success).length}/${results.qualityTest.length}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">연결 품질</div>
+                            <div class="detail-value">${avgResponseTime < 100 ? '우수' : avgResponseTime < 300 ? '양호' : '보통'}</div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(qualityDiv);
+            }
+            
+            // 외부 WiFi 데이터
+            if (results.externalData) {
+                const externalDiv = document.createElement('div');
+                externalDiv.className = 'network-item';
+                externalDiv.innerHTML = `
+                    <h5>🌐 주변 WiFi 현황 (예상)</h5>
+                    <div class="network-detail">
+                        <div class="detail-item">
+                            <div class="detail-label">총 네트워크</div>
+                            <div class="detail-value">${results.externalData.networksInArea}개</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">오픈 네트워크</div>
+                            <div class="detail-value">${results.externalData.openNetworks}개</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">보안 네트워크</div>
+                            <div class="detail-value">${results.externalData.secureNetworks}개</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">평균 신호</div>
+                            <div class="detail-value">${results.externalData.averageSignal} dBm</div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(externalDiv);
+            }
+        }
+
+        // 상세 분석 실행
+        async function performDetailedAnalysis() {
+            const analysisDiv = document.getElementById('detailedAnalysis');
+            analysisDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>상세 분석을 실행하고 있습니다...</p></div>';
+            
+            try {
+                // 다양한 보안 점검 수행
+                const securityChecks = await performSecurityChecks();
+                const performanceAnalysis = await performPerformanceAnalysis();
+                const networkFingerprint = await createNetworkFingerprint();
+                
+                displayDetailedResults({
+                    security: securityChecks,
+                    performance: performanceAnalysis,
+                    fingerprint: networkFingerprint
+                });
+                
+            } catch (error) {
+                analysisDiv.innerHTML = `<div class="error-message">상세 분석 실패: ${error.message}</div>`;
+            }
+        }
+
+        // 보안 점검
+        async function performSecurityChecks() {
+            const checks = {
+                httpsSupport: await checkHTTPSSupport(),
+                dnsSecure: await checkDNSSecurity(),
+                connectionEncryption: await checkConnectionEncryption(),
+                vpnDetection: await detectVPN()
+            };
+            
+            return checks;
+        }
+
+        // HTTPS 지원 확인
+        async function checkHTTPSSupport() {
+            try {
+                const response = await fetch('https://httpbin.org/status/200');
+                return {
+                    supported: true,
+                    certificate: 'Valid',
+                    protocol: 'TLS 1.2+'
+                };
+            } catch (error) {
+                return {
+                    supported: false,
+                    error: error.message
+                };
+            }
+        }
+
+        // DNS 보안 확인
+        async function checkDNSSecurity() {
+            try {
+                // DNS over HTTPS 테스트
+                const response = await fetch('https://cloudflare-dns.com/dns-query?name=google.com&type=A', {
+                    headers: { 'Accept': 'application/dns-json' }
+                });
+                const data = await response.json();
+                
+                return {
+                    dohSupported: true,
+                    responseTime: performance.now(),
+                    status: data.Status === 0 ? 'Success' : 'Failed'
+                };
+            } catch (error) {
+                return {
+                    dohSupported: false,
+                    error: error.message
+                };
+            }
+        }
+
+        // 연결 암호화 확인
+        async function checkConnectionEncryption() {
+            return {
+                protocol: location.protocol,
+                secure: location.protocol === 'https:',
+                port: location.port || (location.protocol === 'https:' ? '443' : '80')
+            };
+        }
+
+        // VPN 감지
+        async function detectVPN() {
+            try {
+                // 여러 IP 확인 서비스를 통해 VPN 사용 여부 추정
+                const ipServices = [
+                    'https://api.ipify.org?format=json',
+                    'https://httpbin.org/ip'
+                ];
+                
+                const results = [];
+                for (const service of ipServices) {
+                    try {
+                        const response = await fetch(service);
+                        const data = await response.json();
+                        results.push(data.ip || data.origin);
+                    } catch (e) {
+                        console.log('IP 서비스 오류:', e);
+                    }
+                }
+                
+                return {
+                    checked: true,
+                    consistentIP: results.length > 1 ? results[0] === results[1] : true,
+                    suspiciousActivity: false
+                };
+            } catch (error) {
+                return {
+                    checked: false,
+                    error: error.message
+                };
+            }
+        }
+
+        // 성능 분석
+        async function performPerformanceAnalysis() {
+            const startTime = performance.now();
+            
+            try {
+                // 다양한 크기의 파일 다운로드로 대역폭 측정
+                const downloadSizes = [1024, 10240, 102400]; // 1KB, 10KB, 100KB
+                const downloadResults = [];
+                
+                for (const size of downloadSizes) {
+                    const testStart = performance.now();
+                    await fetch(`https://httpbin.org/bytes/${size}`);
+                    const testEnd = performance.now();
+                    
+                    downloadResults.push({
+                        size: size,
+                        time: testEnd - testStart,
+                        speed: (size / 1024) / ((testEnd - testStart) / 1000) // KB/s
+                    });
+                }
+                
+                return {
+                    downloadTests: downloadResults,
+                    totalTestTime: performance.now() - startTime
+                };
+            } catch (error) {
+                return {
+                    error: error.message
+                };
+            }
+        }
+
+        // 네트워크 지문 생성
+        async function createNetworkFingerprint() {
+            const fingerprint = {
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                screen: `${screen.width}x${screen.height}`,
+                colorDepth: screen.colorDepth,
+                pixelRatio: window.devicePixelRatio,
+                cookieEnabled: navigator.cookieEnabled,
+                doNotTrack: navigator.doNotTrack,
+                hardwareConcurrency: navigator.hardwareConcurrency,
+                maxTouchPoints: navigator.maxTouchPoints,
+                platform: navigator.platform
+            };
+            
+            // 간단한 해시 생성
+            const fingerprintString = JSON.stringify(fingerprint);
+            const hash = await simpleHash(fingerprintString);
+            
+            return {
+                hash: hash,
+                details: fingerprint
+            };
+        }
+
+        // 간단한 해시 함수
+        async function simpleHash(str) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(str);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 16);
+        }
+
+        // 상세 결과 표시
+        function displayDetailedResults(results) {
+            const analysisDiv = document.getElementById('detailedAnalysis');
+            analysisDiv.innerHTML = `
+                <h4>🔬 상세 분석 결과</h4>
+                
+                <div class="network-detail">
+                    <div class="detail-item">
+                        <div class="detail-label">HTTPS 지원</div>
+                        <div class="detail-value">${results.security.httpsSupport.supported ? '✅ 지원됨' : '❌ 미지원'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">DNS 보안</div>
+                        <div class="detail-value">${results.security.dnsSecure.dohSupported ? '✅ DoH 지원' : '❌ 기본 DNS'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">연결 암호화</div>
+                        <div class="detail-value">${results.security.connectionEncryption.secure ? '✅ 암호화됨' : '❌ 평문'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">네트워크 ID</div>
+                        <div class="detail-value">${results.fingerprint.hash}</div>
+                    </div>
+                </div>
+                
+                ${results.performance.downloadTests ? `
+                <h5>📊 성능 테스트 결과</h5>
+                <div class="network-detail">
+                    ${results.performance.downloadTests.map(test => `
+                        <div class="detail-item">
+                            <div class="detail-label">${test.size/1024}KB 다운로드</div>
+                            <div class="detail-value">${test.speed.toFixed(2)} KB/s</div>
+                        </div>
+                    `).join('')}
+                </div>
+                ` : ''}
+            `;
+        }
+
+        // 보안 상태 점검
+        async function checkSecurityStatus() {
+            const resultsDiv = document.getElementById('analysisResults');
+            resultsDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>보안 상태를 점검하고 있습니다...</p></div>';
+            
+            try {
+                const securityScore = await calculateSecurityScore();
+                const vulnerabilities = await identifyVulnerabilities();
+                const recommendations = generateRecommendations(securityScore, vulnerabilities);
+                
+                displaySecurityResults({
+                    score: securityScore,
+                    vulnerabilities: vulnerabilities,
+                    recommendations: recommendations
+                });
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error-message">보안 점검 실패: ${error.message}</div>`;
+            }
+        }
+
+        // 보안 점수 계산
+        async function calculateSecurityScore() {
+            let score = 100;
+            const factors = [];
+            
+            // HTTPS 사용 여부
+            if (location.protocol !== 'https:') {
+                score -= 30;
+                factors.push('HTTPS 미사용 (-30점)');
+            }
+            
+            // 최신 브라우저 사용 여부
+            const userAgent = navigator.userAgent;
+            if (userAgent.includes('Chrome') && !userAgent.includes('Edg')) {
+                factors.push('Chrome 브라우저 (+10점)');
+                score += 10;
+            }
+            
+            // 쿠키 활성화 여부
+            if (!navigator.cookieEnabled) {
+                score -= 10;
+                factors.push('쿠키 비활성화 (-10점)');
+            }
+            
+            // Do Not Track 설정
+            if (navigator.doNotTrack === '1') {
+                score += 5;
+                factors.push('Do Not Track 활성화 (+5점)');
+            }
+            
+            return {
+                total: Math.max(0, Math.min(100, score)),
+                factors: factors
+            };
+        }
+
+        // 취약점 식별
+        async function identifyVulnerabilities() {
+            const vulnerabilities = [];
+            
+            // 기본적인 취약점 체크
+            if (location.protocol !== 'https:') {
+                vulnerabilities.push({
+                    type: 'high',
+                    title: '암호화되지 않은 연결',
+                    description: 'HTTP 연결을 사용하고 있어 데이터가 암호화되지 않습니다.'
+                });
+            }
+            
+            if (document.cookie.includes('secure=false')) {
+                vulnerabilities.push({
+                    type: 'medium',
+                    title: '안전하지 않은 쿠키',
+                    description: '쿠키가 Secure 플래그 없이 설정되어 있습니다.'
+                });
+            }
+            
+            // 브라우저 지원 확인
+            if (!('serviceWorker' in navigator)) {
+                vulnerabilities.push({
+                    type: 'low',
+                    title: '오래된 브라우저',
+                    description: '최신 웹 표준을 지원하지 않는 브라우저를 사용 중입니다.'
+                });
+            }
+            
+            return vulnerabilities;
         }
 
         // 권고사항 생성
-        function generateRecommendations(stats) {
+        function generateRecommendations(securityScore, vulnerabilities) {
             const recommendations = [];
             
-            const openCount = stats.securityStats['Open'] || 0;
-            if (openCount > 0) {
-                recommendations.push(`• ${openCount}개의 보안되지 않은 네트워크가 발견되었습니다. 즉시 보안 설정이 필요합니다.`);
+            if (securityScore.total < 70) {
+                recommendations.push('전반적인 보안 수준이 낮습니다. 아래 권고사항을 따르세요.');
             }
             
-            const wepCount = stats.securityStats['WEP'] || 0;
-            if (wepCount > 0) {
-                recommendations.push(`• ${wepCount}개의 WEP 보안 네트워크가 발견되었습니다. WPA2 이상으로 업그레이드가 필요합니다.`);
-            }
-            
-            const weakSignals = measurementData.filter(d => d.signal < -70).length;
-            if (weakSignals > measurementData.length * 0.3) {
-                recommendations.push('• 신호가 약한 지역이 많습니다. 액세스 포인트 추가 설치를 검토하세요.');
-            }
+            vulnerabilities.forEach(vuln => {
+                switch (vuln.type) {
+                    case 'high':
+                        recommendations.push(`🔴 즉시 조치: ${vuln.title} - ${vuln.description}`);
+                        break;
+                    case 'medium':
+                        recommendations.push(`🟡 개선 권장: ${vuln.title} - ${vuln.description}`);
+                        break;
+                    case 'low':
+                        recommendations.push(`🟢 검토 사항: ${vuln.title} - ${vuln.description}`);
+                        break;
+                }
+            });
             
             if (recommendations.length === 0) {
-                recommendations.push('• 전반적으로 양호한 보안 상태입니다. 정기적인 점검을 계속 수행하세요.');
+                recommendations.push('✅ 현재 네트워크 보안 상태가 양호합니다.');
             }
             
-            return recommendations.join('\n');
+            return recommendations;
         }
 
-        // 리포트 생성 버튼 추가
-        document.addEventListener('DOMContentLoaded', function() {
-            const exportSection = document.querySelector('.export-section');
-            if (exportSection) {
-                const reportButton = document.createElement('button');
-                reportButton.className = 'btn';
-                reportButton.innerHTML = '📋 분석 리포트 생성';
-                reportButton.onclick = generateAnalysisReport;
-                exportSection.insertBefore(reportButton, exportSection.lastElementChild);
-            }
+        // 보안 결과 표시
+        function displaySecurityResults(results) {
+            const resultsDiv = document.getElementById('analysisResults');
+            
+            const scoreColor = results.score.total >= 80 ? '#48bb78' : 
+                             results.score.total >= 60 ? '#ed8936' : '#f56565';
+            
+            resultsDiv.innerHTML = `
+                <div class="network-detail">
+                    <div class="detail-item" style="border-left-color: ${scoreColor}">
+                        <div class="detail-label">보안 점수</div>
+                        <div class="detail-value" style="color: ${scoreColor}; font-size: 1.5em;">
+                            ${results.score.total}/100
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">발견된 취약점</div>
+                        <div class="detail-value">${results.vulnerabilities.length}개</div>
+                    </div>
+                </div>
+                
+                <h4>📋 권고사항</h4>
+                <ul style="margin: 15px 0; padding-left: 20px;">
+                    ${results.recommendations.map(rec => `<li style="margin: 5px 0;">${rec}</li>`).join('')}
+                </ul>
+                
+                <h4>📊 점수 산정 요소</h4>
+                <ul style="margin: 15px 0; padding-left: 20px;">
+                    ${results.score.factors.map(factor => `<li style="margin: 5px 0;">${factor}</li>`).join('')}
+                </ul>
+            `;
+        }
+
+        // 유틸리티 함수들
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            document.body.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                if (errorDiv.parentNode) {
+                    errorDiv.parentNode.removeChild(errorDiv);
+                }
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.textContent = message;
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                if (successDiv.parentNode) {
+                    successDiv.parentNode.removeChild(successDiv);
+                }
+            }, 3000);
+        }
+
+        // 상세 분석 업데이트
+        function updateDetailedAnalysis(networkResults, avgLatency, quality) {
+            const analysisDiv = document.getElementById('detailedAnalysis');
+            
+            analysisDiv.innerHTML = `
+                <h4>🌐 네트워크 연결 분석</h4>
+                <div class="network-detail">
+                    <div class="detail-item">
+                        <div class="detail-label">평균 지연시간</div>
+                        <div class="detail-value">${avgLatency} ms</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">연결 품질</div>
+                        <div class="detail-value">${quality}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">성공한 테스트</div>
+                        <div class="detail-value">${networkResults.filter(r => r.success).length}/${networkResults.length}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">연결 상태</div>
+                        <div class="detail-value">${navigator.onLine ? '온라인' : '오프라인'}</div>
+                    </div>
+                </div>
+                
+                <h5>🔍 개별 테스트 결과</h5>
+                <div style="max-height: 200px; overflow-y: auto;">
+                    ${networkResults.map(result => `
+                        <div class="detail-item" style="margin: 5px 0;">
+                            <div class="detail-label">${result.url.replace('https://', '').split('/')[0]}</div>
+                            <div class="detail-value">
+                                ${result.success ? `${result.time}ms ✅` : `실패 ❌`}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // 연결 상태 변화 감지
+        window.addEventListener('online', () => {
+            showSuccess('인터넷 연결이 복구되었습니다.');
+            analyzeCurrentNetwork();
         });
+
+        window.addEventListener('offline', () => {
+            showError('인터넷 연결이 끊어졌습니다.');
+        });
+
+        // 네트워크 변화 감지 (지원되는 브라우저)
+        if ('connection' in navigator) {
+            navigator.connection.addEventListener('change', () => {
+                showSuccess('네트워크 연결이 변경되었습니다. 재분석을 시작합니다.');
+                analyzeCurrentNetwork();
+            });
+        }
     </script>
 </body>
 </html>

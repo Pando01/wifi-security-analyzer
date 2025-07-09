@@ -1043,22 +1043,26 @@
             const timestamp = '2025/07/09 23:37:09';
             
             const realNetworks = [
-                { ssid: 'U+Net2443', signal: -89, security: 'WPA2', channel: 1, bssid: '0c:96:cd:f6:24:42', distance: '278.7m' },
-                { ssid: 'Xiaomi_4313', signal: -86, security: 'WPA2', channel: 40, bssid: '44:f7:70:b1:0c:4f', distance: '91.5m' },
-                { ssid: 'SK_WiFiGIGA9FDE_2.4G', signal: -84, security: 'WPA2', channel: 8, bssid: '50:46:ae:4f:9f:e1', distance: '154.5m' },
-                { ssid: 'baramyhome', signal: -30, security: 'WPA2', channel: 9, bssid: '58:11:22:35:8d:50', distance: '0.3m' },
-                { ssid: 'baramyhome_5G-1', signal: -45, security: 'WPA2', channel: 44, bssid: '58:11:22:35:8d:54', distance: '0.8m' },
-                { ssid: 'baramyhome_5G-2', signal: -31, security: 'WPA2', channel: 149, bssid: '58:11:22:35:8d:58', distance: '0.1m' },
-                { ssid: 'iptime_extender', signal: -85, security: 'Open', channel: 9, bssid: '58:86:94:41:1b:d0', distance: '173.0m' },
-                { ssid: 'U+Net9580', signal: -67, security: 'WPA2', channel: 1, bssid: '80:ca:4b:0c:95:82', distance: '22.1m' },
-                { ssid: 'U+Net1010', signal: -81, security: 'WPA2', channel: 5, bssid: '80:ca:4b:10:10:12', distance: '110.0m' },
-                { ssid: 'U+Net1010_5G', signal: -87, security: 'WPA2', channel: 44, bssid: '80:ca:4b:10:10:13', distance: '102.3m' },
-                { ssid: 'U+Net612C', signal: -70, security: 'WPA2', channel: 8, bssid: '80:ca:4b:75:61:2e', distance: '30.8m' },
-                { ssid: 'U+Net612C_5G', signal: -86, security: 'WPA2', channel: 36, bssid: '80:ca:4b:75:61:2f', distance: '91.9m' },
-                { ssid: 'KT_GiGA_5G_C0FA', signal: -77, security: 'WPA2', channel: 153, bssid: '88:3c:1c:7b:c0:fd', distance: '29.3m' },
-                { ssid: 'KT_GiGA_2G_C0FA', signal: -54, security: 'WPA2', channel: 6, bssid: '88:3c:1c:7b:c0:fe', distance: '4.9m' },
-                { ssid: 'Hidden Network', signal: -88, security: 'WPA2', channel: 44, bssid: '8a:ca:4b:10:10:13', distance: '114.8m' }
+                { ssid: 'U+Net2443', signal: -89, security: 'WPA2', channel: 1, frequency: '2.4GHz', bssid: '0c:96:cd:f6:24:42', distance: '278.7m' },
+                { ssid: 'Xiaomi_4313', signal: -86, security: 'WPA2', channel: 40, frequency: '5GHz', bssid: '44:f7:70:b1:0c:4f', distance: '91.5m' },
+                { ssid: 'SK_WiFiGIGA9FDE_2.4G', signal: -84, security: 'WPA2', channel: 8, frequency: '2.4GHz', bssid: '50:46:ae:4f:9f:e1', distance: '154.5m' },
+                { ssid: 'baramyhome', signal: -30, security: 'WPA2', channel: 9, frequency: '2.4GHz', bssid: '58:11:22:35:8d:50', distance: '0.3m' },
+                { ssid: 'baramyhome_5G-1', signal: -45, security: 'WPA2', channel: 44, frequency: '5GHz', bssid: '58:11:22:35:8d:54', distance: '0.8m' },
+                { ssid: 'baramyhome_5G-2', signal: -31, security: 'WPA2', channel: 149, frequency: '5GHz', bssid: '58:11:22:35:8d:58', distance: '0.1m' },
+                { ssid: 'iptime_extender', signal: -85, security: 'Open', channel: 9, frequency: '2.4GHz', bssid: '58:86:94:41:1b:d0', distance: '173.0m' },
+                { ssid: 'U+Net9580', signal: -67, security: 'WPA2', channel: 1, frequency: '2.4GHz', bssid: '80:ca:4b:0c:95:82', distance: '22.1m' },
+                { ssid: 'U+Net1010', signal: -81, security: 'WPA2', channel: 5, frequency: '2.4GHz', bssid: '80:ca:4b:10:10:12', distance: '110.0m' },
+                { ssid: 'U+Net1010_5G', signal: -87, security: 'WPA2', channel: 44, frequency: '5GHz', bssid: '80:ca:4b:10:10:13', distance: '102.3m' },
+                { ssid: 'U+Net612C', signal: -70, security: 'WPA2', channel: 8, frequency: '2.4GHz', bssid: '80:ca:4b:75:61:2e', distance: '30.8m' },
+                { ssid: 'U+Net612C_5G', signal: -86, security: 'WPA2', channel: 36, frequency: '5GHz', bssid: '80:ca:4b:75:61:2f', distance: '91.9m' },
+                { ssid: 'KT_GiGA_5G_C0FA', signal: -77, security: 'WPA2', channel: 153, frequency: '5GHz', bssid: '88:3c:1c:7b:c0:fd', distance: '29.3m' },
+                { ssid: 'KT_GiGA_2G_C0FA', signal: -54, security: 'WPA2', channel: 6, frequency: '2.4GHz', bssid: '88:3c:1c:7b:c0:fe', distance: '4.9m' },
+                { ssid: 'Hidden Network', signal: -88, security: 'WPA2', channel: 44, frequency: '5GHz', bssid: '8a:ca:4b:10:10:13', distance: '114.8m' }
             ];
+
+            // WiFi 네트워크 목록에 표시
+            displayWiFiNetworks(realNetworks);
+            document.getElementById('wifiStatus').innerHTML = `<p>✅ ${realNetworks.length}개의 실제 WiFi 네트워크를 로드했습니다 (3-5교실)</p>`;
 
             // 기존 해당 위치 데이터 삭제
             measurementData = measurementData.filter(data => data.location !== currentLocation);
@@ -1082,7 +1086,7 @@
             updateStatistics();
             renderTable();
             
-            alert(`3-5교실 실제 WiFi 데이터 ${realNetworks.length}개가 측정 데이터에 추가되었습니다.`);
+            alert(`3-5교실 실제 WiFi 데이터 ${realNetworks.length}개가 검색 목록 및 측정 데이터에 추가되었습니다.`);
         }
 
         // 3층 실험실 실제 데이터 추가
@@ -1091,29 +1095,33 @@
             const timestamp = '2025/07/09 23:39:16';
             
             const realNetworks = [
-                { ssid: 'SK_WiFiGIGA1911_2.4G', signal: -87, security: 'WPA2', channel: 5, bssid: '0c:96:cd:01:19:14', distance: '219.6m' },
-                { ssid: 'SK_WiFiGIGAD758_2.4G', signal: -88, security: 'WPA2', channel: 7, bssid: '0c:96:cd:3f:d7:5b', distance: '245.3m' },
-                { ssid: 'Hidden Network 1', signal: -87, security: 'WPA2', channel: 7, bssid: '12:96:cd:3f:d7:5b', distance: '218.7m' },
-                { ssid: '[floor a/c] Samsung', signal: -86, security: 'WPA2', channel: 1, bssid: '28:6d:97:a9:0e:46', distance: '197.3m' },
-                { ssid: 'Xiaomi_4313', signal: -68, security: 'WPA2', channel: 1, bssid: '44:f7:70:b1:0c:4e', distance: '24.8m' },
-                { ssid: 'Xiaomi_4313_5G', signal: -87, security: 'WPA2', channel: 40, bssid: '44:f7:70:b1:0c:4f', distance: '102.7m' },
-                { ssid: 'baramyhome', signal: -30, security: 'WPA2', channel: 9, bssid: '58:11:22:35:8d:50', distance: '0.3m' },
-                { ssid: 'baramyhome_5G-1', signal: -47, security: 'WPA2', channel: 44, bssid: '58:11:22:35:8d:54', distance: '1.0m' },
-                { ssid: 'baramyhome_5G-2', signal: -32, security: 'WPA2', channel: 149, bssid: '58:11:22:35:8d:58', distance: '0.2m' },
-                { ssid: 'chang2', signal: -79, security: 'WPA2', channel: 10, bssid: '58:86:94:45:a8:9a', distance: '86.5m' },
-                { ssid: 'AT_401_PAC_910604_WW_0e58', signal: -79, security: 'WPA2', channel: 11, bssid: '64:cb:e9:91:0e:58', distance: '86.3m' },
-                { ssid: 'U+Net9580', signal: -68, security: 'WPA2', channel: 1, bssid: '80:ca:4b:0c:95:82', distance: '24.8m' },
-                { ssid: 'U+Net1010', signal: -80, security: 'WPA2', channel: 5, bssid: '80:ca:4b:10:10:12', distance: '98.1m' },
-                { ssid: 'U+Net1010_5G', signal: -89, security: 'WPA2', channel: 44, bssid: '80:ca:4b:10:10:13', distance: '128.8m' },
-                { ssid: 'U+Net612C', signal: -69, security: 'WPA2', channel: 8, bssid: '80:ca:4b:75:61:2e', distance: '27.5m' },
-                { ssid: 'U+Net612C_5G', signal: -85, security: 'WPA2', channel: 36, bssid: '80:ca:4b:75:61:2f', distance: '81.9m' },
-                { ssid: 'DIRECT-2B C51x Series', signal: -83, security: 'WPA2', channel: 5, bssid: '86:25:19:e1:8b:2b', distance: '138.5m' },
-                { ssid: 'KT_GiGA_5G_C0FA', signal: -75, security: 'WPA2', channel: 153, bssid: '88:3c:1c:7b:c0:fd', distance: '23.3m' },
-                { ssid: 'KT_GiGA_2G_C0FA', signal: -62, security: 'WPA2', channel: 6, bssid: '88:3c:1c:7b:c0:fe', distance: '12.3m' },
-                { ssid: 'Hidden Network 2', signal: -86, security: 'WPA2', channel: 36, bssid: '8a:ca:4b:75:61:2f', distance: '91.9m' },
-                { ssid: 'Hidden Network 3', signal: -75, security: 'WPA2', channel: 153, bssid: 'ba:3c:1c:7b:c0:fd', distance: '23.3m' },
-                { ssid: 'Hidden Network 4', signal: -76, security: 'WPA2', channel: 11, bssid: 'ca:dd:6a:58:80:47', distance: '61.1m' }
+                { ssid: 'SK_WiFiGIGA1911_2.4G', signal: -87, security: 'WPA2', channel: 5, frequency: '2.4GHz', bssid: '0c:96:cd:01:19:14', distance: '219.6m' },
+                { ssid: 'SK_WiFiGIGAD758_2.4G', signal: -88, security: 'WPA2', channel: 7, frequency: '2.4GHz', bssid: '0c:96:cd:3f:d7:5b', distance: '245.3m' },
+                { ssid: 'Hidden Network 1', signal: -87, security: 'WPA2', channel: 7, frequency: '2.4GHz', bssid: '12:96:cd:3f:d7:5b', distance: '218.7m' },
+                { ssid: '[floor a/c] Samsung', signal: -86, security: 'WPA2', channel: 1, frequency: '2.4GHz', bssid: '28:6d:97:a9:0e:46', distance: '197.3m' },
+                { ssid: 'Xiaomi_4313', signal: -68, security: 'WPA2', channel: 1, frequency: '2.4GHz', bssid: '44:f7:70:b1:0c:4e', distance: '24.8m' },
+                { ssid: 'Xiaomi_4313_5G', signal: -87, security: 'WPA2', channel: 40, frequency: '5GHz', bssid: '44:f7:70:b1:0c:4f', distance: '102.7m' },
+                { ssid: 'baramyhome', signal: -30, security: 'WPA2', channel: 9, frequency: '2.4GHz', bssid: '58:11:22:35:8d:50', distance: '0.3m' },
+                { ssid: 'baramyhome_5G-1', signal: -47, security: 'WPA2', channel: 44, frequency: '5GHz', bssid: '58:11:22:35:8d:54', distance: '1.0m' },
+                { ssid: 'baramyhome_5G-2', signal: -32, security: 'WPA2', channel: 149, frequency: '5GHz', bssid: '58:11:22:35:8d:58', distance: '0.2m' },
+                { ssid: 'chang2', signal: -79, security: 'WPA2', channel: 10, frequency: '2.4GHz', bssid: '58:86:94:45:a8:9a', distance: '86.5m' },
+                { ssid: 'AT_401_PAC_910604_WW_0e58', signal: -79, security: 'WPA2', channel: 11, frequency: '2.4GHz', bssid: '64:cb:e9:91:0e:58', distance: '86.3m' },
+                { ssid: 'U+Net9580', signal: -68, security: 'WPA2', channel: 1, frequency: '2.4GHz', bssid: '80:ca:4b:0c:95:82', distance: '24.8m' },
+                { ssid: 'U+Net1010', signal: -80, security: 'WPA2', channel: 5, frequency: '2.4GHz', bssid: '80:ca:4b:10:10:12', distance: '98.1m' },
+                { ssid: 'U+Net1010_5G', signal: -89, security: 'WPA2', channel: 44, frequency: '5GHz', bssid: '80:ca:4b:10:10:13', distance: '128.8m' },
+                { ssid: 'U+Net612C', signal: -69, security: 'WPA2', channel: 8, frequency: '2.4GHz', bssid: '80:ca:4b:75:61:2e', distance: '27.5m' },
+                { ssid: 'U+Net612C_5G', signal: -85, security: 'WPA2', channel: 36, frequency: '5GHz', bssid: '80:ca:4b:75:61:2f', distance: '81.9m' },
+                { ssid: 'DIRECT-2B C51x Series', signal: -83, security: 'WPA2', channel: 5, frequency: '2.4GHz', bssid: '86:25:19:e1:8b:2b', distance: '138.5m' },
+                { ssid: 'KT_GiGA_5G_C0FA', signal: -75, security: 'WPA2', channel: 153, frequency: '5GHz', bssid: '88:3c:1c:7b:c0:fd', distance: '23.3m' },
+                { ssid: 'KT_GiGA_2G_C0FA', signal: -62, security: 'WPA2', channel: 6, frequency: '2.4GHz', bssid: '88:3c:1c:7b:c0:fe', distance: '12.3m' },
+                { ssid: 'Hidden Network 2', signal: -86, security: 'WPA2', channel: 36, frequency: '5GHz', bssid: '8a:ca:4b:75:61:2f', distance: '91.9m' },
+                { ssid: 'Hidden Network 3', signal: -75, security: 'WPA2', channel: 153, frequency: '5GHz', bssid: 'ba:3c:1c:7b:c0:fd', distance: '23.3m' },
+                { ssid: 'Hidden Network 4', signal: -76, security: 'WPA2', channel: 11, frequency: '2.4GHz', bssid: 'ca:dd:6a:58:80:47', distance: '61.1m' }
             ];
+
+            // WiFi 네트워크 목록에 표시
+            displayWiFiNetworks(realNetworks);
+            document.getElementById('wifiStatus').innerHTML = `<p>✅ ${realNetworks.length}개의 실제 WiFi 네트워크를 로드했습니다 (3층 실험실)</p>`;
 
             // 기존 해당 위치 데이터 삭제
             measurementData = measurementData.filter(data => data.location !== currentLocation);
@@ -1137,7 +1145,7 @@
             updateStatistics();
             renderTable();
             
-            alert(`3층 실험실 실제 WiFi 데이터 ${realNetworks.length}개가 측정 데이터에 추가되었습니다.`);
+            alert(`3층 실험실 실제 WiFi 데이터 ${realNetworks.length}개가 검색 목록 및 측정 데이터에 추가되었습니다.`);
         }
 
         document.getElementById('customLocation').addEventListener('input', function() {

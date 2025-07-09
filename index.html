@@ -326,12 +326,10 @@
                     <label for="location">측정 위치</label>
                     <select id="location">
                         <option value="">위치를 선택하세요</option>
-                        <option value="3-5교실">3-5교실</option>
-                        <option value="3층실험실">3층실험실</option>
                         <option value="교실-1층-101호">교실 - 1층 101호</option>
                         <option value="교실-1층-102호">교실 - 1층 102호</option>
-                        <option value="교실-2층-201호">교실 - 2층 201호</option>
-                        <option value="교실-2층-202호">교실 - 2층 202호</option>
+                        <option value="교실-3층-3-5교실">교실 - 3층 3-5교실</option>
+                        <option value="실험실-3층-실험실">실험실 - 3층 실험실</option>
                         <option value="도서관-1층">도서관 - 1층</option>
                         <option value="도서관-2층">도서관 - 2층</option>
                         <option value="복도-1층">복도 - 1층</option>
@@ -508,62 +506,52 @@
             document.getElementById('loading').style.display = 'none';
         }
 
-        // 실제 스캔 데이터 (3-5교실, 3층실험실)
-        const realScanData = {
-            "3-5교실": [
-                { ssid: "U+Net2443", signal: -89, security: "WPA2", channel: 1, frequency: "2.4GHz" },
-                { ssid: "Xiaomi_4313", signal: -86, security: "WPA2", channel: 40, frequency: "5GHz" },
-                { ssid: "SK_WiFiGIGA9FDE_2.4G", signal: -84, security: "WPA2", channel: 8, frequency: "2.4GHz" },
-                { ssid: "baramyhome", signal: -30, security: "WPA2", channel: 9, frequency: "2.4GHz" },
-                { ssid: "baramyhome_5G-1", signal: -45, security: "WPA2", channel: 44, frequency: "5GHz" },
-                { ssid: "baramyhome_5G-2", signal: -31, security: "WPA2", channel: 149, frequency: "5GHz" },
-                { ssid: "iptime_extender", signal: -85, security: "Open", channel: 9, frequency: "2.4GHz" },
-                { ssid: "U+Net9580", signal: -67, security: "WPA2", channel: 1, frequency: "2.4GHz" },
-                { ssid: "U+Net1010", signal: -81, security: "WPA2", channel: 5, frequency: "2.4GHz" },
-                { ssid: "U+Net1010_5G", signal: -87, security: "WPA2", channel: 44, frequency: "5GHz" },
-                { ssid: "U+Net612C", signal: -70, security: "WPA2", channel: 8, frequency: "2.4GHz" },
-                { ssid: "U+Net612C_5G", signal: -86, security: "WPA2", channel: 36, frequency: "5GHz" },
-                { ssid: "KT_GiGA_5G_C0FA", signal: -77, security: "WPA2", channel: 153, frequency: "5GHz" },
-                { ssid: "KT_GiGA_2G_C0FA", signal: -54, security: "WPA2", channel: 6, frequency: "2.4GHz" },
-                { ssid: "*hidden*", signal: -88, security: "WPA2", channel: 44, frequency: "5GHz" }
-            ],
-            "3층실험실": [
-                { ssid: "SK_WiFiGIGA1911_2.4G", signal: -87, security: "WPA2", channel: 5, frequency: "2.4GHz" },
-                { ssid: "SK_WiFiGIGAD758_2.4G", signal: -88, security: "WPA2", channel: 7, frequency: "2.4GHz" },
-                { ssid: "[floor a/c] Samsung", signal: -86, security: "WPA2", channel: 1, frequency: "2.4GHz" },
-                { ssid: "Xiaomi_4313", signal: -68, security: "WPA2", channel: 1, frequency: "2.4GHz" },
-                { ssid: "baramyhome", signal: -30, security: "WPA2", channel: 9, frequency: "2.4GHz" },
-                { ssid: "baramyhome_5G-1", signal: -47, security: "WPA2", channel: 44, frequency: "5GHz" },
-                { ssid: "baramyhome_5G-2", signal: -32, security: "WPA2", channel: 149, frequency: "5GHz" },
-                { ssid: "chang2", signal: -79, security: "WPA2", channel: 10, frequency: "2.4GHz" },
-                { ssid: "AT_401_PAC_910604_WW_0e58", signal: -79, security: "WPA2", channel: 11, frequency: "2.4GHz" },
-                { ssid: "U+Net9580", signal: -68, security: "WPA2", channel: 1, frequency: "2.4GHz" },
-                { ssid: "U+Net1010", signal: -80, security: "WPA2", channel: 5, frequency: "2.4GHz" },
-                { ssid: "U+Net612C", signal: -69, security: "WPA2", channel: 8, frequency: "2.4GHz" },
-                { ssid: "DIRECT-2B C51x Series", signal: -83, security: "WPA2", channel: 5, frequency: "2.4GHz" },
-                { ssid: "KT_GiGA_5G_C0FA", signal: -75, security: "WPA2", channel: 153, frequency: "5GHz" },
-                { ssid: "KT_GiGA_2G_C0FA", signal: -62, security: "WPA2", channel: 6, frequency: "2.4GHz" },
-                { ssid: "*hidden*", signal: -87, security: "WPA2", channel: 7, frequency: "2.4GHz" },
-                { ssid: "*hidden*", signal: -75, security: "WPA2", channel: 153, frequency: "5GHz" },
-                { ssid: "*hidden*", signal: -76, security: "WPA2", channel: 11, frequency: "2.4GHz" }
-            ]
-        };
-
-        // WiFi 스캔 시뮬레이션 데이터
+        // 실제 스캔 데이터 기반 시뮬레이션
         function simulateWiFiScan() {
             const location = document.getElementById('location').value || document.getElementById('customLocation').value;
-            let networks = [];
+            let sampleNetworks = [];
 
-            // 실제 스캔 데이터가 있는 경우 사용
-            if (realScanData[location]) {
-                networks = realScanData[location];
-                document.getElementById('wifiStatus').innerHTML = `<p>✅ ${networks.length}개의 WiFi 네트워크를 발견했습니다</p>`;
-                
-                // 실제 데이터를 자동으로 측정 데이터에 추가
-                autoAddRealData(networks, location);
+            // 위치별 실제 스캔 데이터 기반 네트워크
+            if (location.includes('3-5') || location.includes('교실')) {
+                sampleNetworks = [
+                    { ssid: 'U+Net2443', signal: -89, security: 'WPA2', channel: 1, frequency: '2.4GHz', distance: '278.7m' },
+                    { ssid: 'Xiaomi_4313', signal: -86, security: 'WPA2', channel: 40, frequency: '5GHz', distance: '91.5m' },
+                    { ssid: 'SK_WiFiGIGA9FDE_2.4G', signal: -84, security: 'WPA2', channel: 8, frequency: '2.4GHz', distance: '154.5m' },
+                    { ssid: 'baramyhome', signal: -30, security: 'WPA2', channel: 9, frequency: '2.4GHz', distance: '0.3m' },
+                    { ssid: 'baramyhome_5G-1', signal: -45, security: 'WPA2', channel: 44, frequency: '5GHz', distance: '0.8m' },
+                    { ssid: 'baramyhome_5G-2', signal: -31, security: 'WPA2', channel: 149, frequency: '5GHz', distance: '0.1m' },
+                    { ssid: 'iptime_extender', signal: -85, security: 'Open', channel: 9, frequency: '2.4GHz', distance: '173.0m' },
+                    { ssid: 'U+Net9580', signal: -67, security: 'WPA2', channel: 1, frequency: '2.4GHz', distance: '22.1m' },
+                    { ssid: 'U+Net1010', signal: -81, security: 'WPA2', channel: 5, frequency: '2.4GHz', distance: '110.0m' },
+                    { ssid: 'U+Net612C', signal: -70, security: 'WPA2', channel: 8, frequency: '2.4GHz', distance: '30.8m' },
+                    { ssid: 'KT_GiGA_2G_C0FA', signal: -54, security: 'WPA2', channel: 6, frequency: '2.4GHz', distance: '4.9m' },
+                    { ssid: 'KT_GiGA_5G_C0FA', signal: -77, security: 'WPA2', channel: 153, frequency: '5GHz', distance: '29.3m' },
+                    { ssid: 'Hidden Network', signal: -88, security: 'WPA2', channel: 44, frequency: '5GHz', distance: '114.8m' }
+                ];
+            } else if (location.includes('3층') || location.includes('실험실')) {
+                sampleNetworks = [
+                    { ssid: 'SK_WiFiGIGA1911_2.4G', signal: -87, security: 'WPA2', channel: 5, frequency: '2.4GHz', distance: '219.6m' },
+                    { ssid: 'SK_WiFiGIGAD758_2.4G', signal: -88, security: 'WPA2', channel: 7, frequency: '2.4GHz', distance: '245.3m' },
+                    { ssid: '[floor a/c] Samsung', signal: -86, security: 'WPA2', channel: 1, frequency: '2.4GHz', distance: '197.3m' },
+                    { ssid: 'Xiaomi_4313', signal: -68, security: 'WPA2', channel: 1, frequency: '2.4GHz', distance: '24.8m' },
+                    { ssid: 'baramyhome', signal: -30, security: 'WPA2', channel: 9, frequency: '2.4GHz', distance: '0.3m' },
+                    { ssid: 'baramyhome_5G-1', signal: -47, security: 'WPA2', channel: 44, frequency: '5GHz', distance: '1.0m' },
+                    { ssid: 'baramyhome_5G-2', signal: -32, security: 'WPA2', channel: 149, frequency: '5GHz', distance: '0.2m' },
+                    { ssid: 'chang2', signal: -79, security: 'WPA2', channel: 10, frequency: '2.4GHz', distance: '86.5m' },
+                    { ssid: 'AT_401_PAC_910604_WW_0e58', signal: -79, security: 'WPA2', channel: 11, frequency: '2.4GHz', distance: '86.3m' },
+                    { ssid: 'U+Net9580', signal: -68, security: 'WPA2', channel: 1, frequency: '2.4GHz', distance: '24.8m' },
+                    { ssid: 'U+Net1010', signal: -80, security: 'WPA2', channel: 5, frequency: '2.4GHz', distance: '98.1m' },
+                    { ssid: 'U+Net612C', signal: -69, security: 'WPA2', channel: 8, frequency: '2.4GHz', distance: '27.5m' },
+                    { ssid: 'DIRECT-2B C51x Series', signal: -83, security: 'WPA2', channel: 5, frequency: '2.4GHz', distance: '138.5m' },
+                    { ssid: 'KT_GiGA_2G_C0FA', signal: -62, security: 'WPA2', channel: 6, frequency: '2.4GHz', distance: '12.3m' },
+                    { ssid: 'KT_GiGA_5G_C0FA', signal: -75, security: 'WPA2', channel: 153, frequency: '5GHz', distance: '23.3m' },
+                    { ssid: 'Hidden Network 1', signal: -87, security: 'WPA2', channel: 7, frequency: '2.4GHz', distance: '218.7m' },
+                    { ssid: 'Hidden Network 2', signal: -86, security: 'WPA2', channel: 36, frequency: '5GHz', distance: '91.9m' },
+                    { ssid: 'Hidden Network 3', signal: -76, security: 'WPA2', channel: 11, frequency: '2.4GHz', distance: '61.1m' }
+                ];
             } else {
-                // 기본 시뮬레이션 데이터
-                const sampleNetworks = [
+                // 기본 시뮬레이션 데이터 (다른 위치)
+                sampleNetworks = [
                     { ssid: 'SchoolWiFi_Main', signal: -45, security: 'WPA2', channel: 6, frequency: '2.4GHz' },
                     { ssid: 'SchoolWiFi_Guest', signal: -52, security: 'WPA2', channel: 11, frequency: '2.4GHz' },
                     { ssid: 'Student_Hotspot_1', signal: -67, security: 'WPA2', channel: 1, frequency: '2.4GHz' },
@@ -572,60 +560,13 @@
                     { ssid: 'OldRouter', signal: -75, security: 'WEP', channel: 2, frequency: '2.4GHz' },
                     { ssid: 'Cafe_WiFi', signal: -68, security: 'WPA3', channel: 36, frequency: '5GHz' }
                 ];
-
-                // 랜덤하게 일부 네트워크만 표시
-                networks = sampleNetworks.filter(() => Math.random() > 0.3);
-                document.getElementById('wifiStatus').innerHTML = `<p>✅ ${networks.length}개의 WiFi 네트워크를 발견했습니다</p>`;
             }
+
+            // 랜덤하게 일부 네트워크만 표시 (실제 환경 시뮬레이션)
+            const detectedNetworks = sampleNetworks.filter(() => Math.random() > 0.2);
             
-            displayWiFiNetworks(networks);
-        }
-
-        // 실제 데이터를 자동으로 측정 데이터에 추가
-        function autoAddRealData(networks, location) {
-            const measurer = document.getElementById('measurer').value || '실제 스캔 데이터';
-            const notes = `실제 WiFi 스캔 결과 (${new Date().toLocaleDateString()})`;
-            
-            let addedCount = 0;
-            const currentTime = new Date();
-            
-            networks.forEach(network => {
-                // 중복 확인 (동일한 위치, 동일한 SSID, 5분 이내)
-                const isDuplicate = measurementData.some(data => 
-                    data.ssid === network.ssid && 
-                    data.location === location &&
-                    Math.abs(new Date(data.timestamp) - currentTime) < 300000 // 5분 이내
-                );
-
-                if (!isDuplicate) {
-                    const measurement = {
-                        timestamp: currentTime.toLocaleString('ko-KR'),
-                        location: location,
-                        ssid: network.ssid,
-                        signal: network.signal,
-                        security: network.security,
-                        channel: network.channel,
-                        measurer: measurer,
-                        notes: notes,
-                        riskLevel: calculateRiskLevel(network.security, network.signal)
-                    };
-
-                    measurementData.push(measurement);
-                    addedCount++;
-                }
-            });
-
-            if (addedCount > 0) {
-                saveData();
-                updateStatistics();
-                renderTable();
-                
-                // 성공 메시지 업데이트
-                setTimeout(() => {
-                    document.getElementById('wifiStatus').innerHTML = 
-                        `<p>✅ ${networks.length}개 네트워크 발견, ${addedCount}개 새 데이터 추가됨</p>`;
-                }, 500);
-            }
+            displayWiFiNetworks(detectedNetworks);
+            document.getElementById('wifiStatus').innerHTML = `<p>✅ ${detectedNetworks.length}개의 WiFi 네트워크를 발견했습니다 (실제 데이터 기반)</p>`;
         }
 
         // WiFi 네트워크 목록 표시
@@ -646,6 +587,7 @@
                                     ${generateSignalBars(network.signal)}
                                 </div>
                             </div>
+                            ${network.distance ? `<div style="font-size: 11px; color: #666;">거리: ${network.distance}</div>` : ''}
                         </div>
                         <div>
                             <span class="security-badge security-${network.security.toLowerCase()}">${network.security}</span>
@@ -1082,10 +1024,121 @@
             }
         });
 
-        // 위치 변경 시 자동 업데이트
+        // 위치 변경 시 자동 데이터 추가
         document.getElementById('location').addEventListener('change', function() {
-            currentLocation = this.value;
+            const location = this.value;
+            currentLocation = location;
+            
+            // 실제 데이터가 있는 위치인 경우 자동으로 측정 데이터 추가
+            if (location === '교실-3층-3-5교실') {
+                addRealWiFiData_3_5_Classroom();
+            } else if (location === '실험실-3층-실험실') {
+                addRealWiFiData_3F_Lab();
+            }
         });
+
+        // 3-5교실 실제 데이터 추가
+        function addRealWiFiData_3_5_Classroom() {
+            const measurer = document.getElementById('measurer').value || 'Auto';
+            const timestamp = '2025/07/09 23:37:09';
+            
+            const realNetworks = [
+                { ssid: 'U+Net2443', signal: -89, security: 'WPA2', channel: 1, bssid: '0c:96:cd:f6:24:42', distance: '278.7m' },
+                { ssid: 'Xiaomi_4313', signal: -86, security: 'WPA2', channel: 40, bssid: '44:f7:70:b1:0c:4f', distance: '91.5m' },
+                { ssid: 'SK_WiFiGIGA9FDE_2.4G', signal: -84, security: 'WPA2', channel: 8, bssid: '50:46:ae:4f:9f:e1', distance: '154.5m' },
+                { ssid: 'baramyhome', signal: -30, security: 'WPA2', channel: 9, bssid: '58:11:22:35:8d:50', distance: '0.3m' },
+                { ssid: 'baramyhome_5G-1', signal: -45, security: 'WPA2', channel: 44, bssid: '58:11:22:35:8d:54', distance: '0.8m' },
+                { ssid: 'baramyhome_5G-2', signal: -31, security: 'WPA2', channel: 149, bssid: '58:11:22:35:8d:58', distance: '0.1m' },
+                { ssid: 'iptime_extender', signal: -85, security: 'Open', channel: 9, bssid: '58:86:94:41:1b:d0', distance: '173.0m' },
+                { ssid: 'U+Net9580', signal: -67, security: 'WPA2', channel: 1, bssid: '80:ca:4b:0c:95:82', distance: '22.1m' },
+                { ssid: 'U+Net1010', signal: -81, security: 'WPA2', channel: 5, bssid: '80:ca:4b:10:10:12', distance: '110.0m' },
+                { ssid: 'U+Net1010_5G', signal: -87, security: 'WPA2', channel: 44, bssid: '80:ca:4b:10:10:13', distance: '102.3m' },
+                { ssid: 'U+Net612C', signal: -70, security: 'WPA2', channel: 8, bssid: '80:ca:4b:75:61:2e', distance: '30.8m' },
+                { ssid: 'U+Net612C_5G', signal: -86, security: 'WPA2', channel: 36, bssid: '80:ca:4b:75:61:2f', distance: '91.9m' },
+                { ssid: 'KT_GiGA_5G_C0FA', signal: -77, security: 'WPA2', channel: 153, bssid: '88:3c:1c:7b:c0:fd', distance: '29.3m' },
+                { ssid: 'KT_GiGA_2G_C0FA', signal: -54, security: 'WPA2', channel: 6, bssid: '88:3c:1c:7b:c0:fe', distance: '4.9m' },
+                { ssid: 'Hidden Network', signal: -88, security: 'WPA2', channel: 44, bssid: '8a:ca:4b:10:10:13', distance: '114.8m' }
+            ];
+
+            // 기존 해당 위치 데이터 삭제
+            measurementData = measurementData.filter(data => data.location !== currentLocation);
+
+            realNetworks.forEach(network => {
+                const measurement = {
+                    timestamp: timestamp,
+                    location: currentLocation,
+                    ssid: network.ssid,
+                    signal: network.signal,
+                    security: network.security,
+                    channel: network.channel,
+                    measurer: measurer,
+                    notes: `실제 측정 데이터 (BSSID: ${network.bssid}, 거리: ${network.distance})`,
+                    riskLevel: calculateRiskLevel(network.security, network.signal)
+                };
+                measurementData.push(measurement);
+            });
+
+            saveData();
+            updateStatistics();
+            renderTable();
+            
+            alert(`3-5교실 실제 WiFi 데이터 ${realNetworks.length}개가 측정 데이터에 추가되었습니다.`);
+        }
+
+        // 3층 실험실 실제 데이터 추가
+        function addRealWiFiData_3F_Lab() {
+            const measurer = document.getElementById('measurer').value || 'Auto';
+            const timestamp = '2025/07/09 23:39:16';
+            
+            const realNetworks = [
+                { ssid: 'SK_WiFiGIGA1911_2.4G', signal: -87, security: 'WPA2', channel: 5, bssid: '0c:96:cd:01:19:14', distance: '219.6m' },
+                { ssid: 'SK_WiFiGIGAD758_2.4G', signal: -88, security: 'WPA2', channel: 7, bssid: '0c:96:cd:3f:d7:5b', distance: '245.3m' },
+                { ssid: 'Hidden Network 1', signal: -87, security: 'WPA2', channel: 7, bssid: '12:96:cd:3f:d7:5b', distance: '218.7m' },
+                { ssid: '[floor a/c] Samsung', signal: -86, security: 'WPA2', channel: 1, bssid: '28:6d:97:a9:0e:46', distance: '197.3m' },
+                { ssid: 'Xiaomi_4313', signal: -68, security: 'WPA2', channel: 1, bssid: '44:f7:70:b1:0c:4e', distance: '24.8m' },
+                { ssid: 'Xiaomi_4313_5G', signal: -87, security: 'WPA2', channel: 40, bssid: '44:f7:70:b1:0c:4f', distance: '102.7m' },
+                { ssid: 'baramyhome', signal: -30, security: 'WPA2', channel: 9, bssid: '58:11:22:35:8d:50', distance: '0.3m' },
+                { ssid: 'baramyhome_5G-1', signal: -47, security: 'WPA2', channel: 44, bssid: '58:11:22:35:8d:54', distance: '1.0m' },
+                { ssid: 'baramyhome_5G-2', signal: -32, security: 'WPA2', channel: 149, bssid: '58:11:22:35:8d:58', distance: '0.2m' },
+                { ssid: 'chang2', signal: -79, security: 'WPA2', channel: 10, bssid: '58:86:94:45:a8:9a', distance: '86.5m' },
+                { ssid: 'AT_401_PAC_910604_WW_0e58', signal: -79, security: 'WPA2', channel: 11, bssid: '64:cb:e9:91:0e:58', distance: '86.3m' },
+                { ssid: 'U+Net9580', signal: -68, security: 'WPA2', channel: 1, bssid: '80:ca:4b:0c:95:82', distance: '24.8m' },
+                { ssid: 'U+Net1010', signal: -80, security: 'WPA2', channel: 5, bssid: '80:ca:4b:10:10:12', distance: '98.1m' },
+                { ssid: 'U+Net1010_5G', signal: -89, security: 'WPA2', channel: 44, bssid: '80:ca:4b:10:10:13', distance: '128.8m' },
+                { ssid: 'U+Net612C', signal: -69, security: 'WPA2', channel: 8, bssid: '80:ca:4b:75:61:2e', distance: '27.5m' },
+                { ssid: 'U+Net612C_5G', signal: -85, security: 'WPA2', channel: 36, bssid: '80:ca:4b:75:61:2f', distance: '81.9m' },
+                { ssid: 'DIRECT-2B C51x Series', signal: -83, security: 'WPA2', channel: 5, bssid: '86:25:19:e1:8b:2b', distance: '138.5m' },
+                { ssid: 'KT_GiGA_5G_C0FA', signal: -75, security: 'WPA2', channel: 153, bssid: '88:3c:1c:7b:c0:fd', distance: '23.3m' },
+                { ssid: 'KT_GiGA_2G_C0FA', signal: -62, security: 'WPA2', channel: 6, bssid: '88:3c:1c:7b:c0:fe', distance: '12.3m' },
+                { ssid: 'Hidden Network 2', signal: -86, security: 'WPA2', channel: 36, bssid: '8a:ca:4b:75:61:2f', distance: '91.9m' },
+                { ssid: 'Hidden Network 3', signal: -75, security: 'WPA2', channel: 153, bssid: 'ba:3c:1c:7b:c0:fd', distance: '23.3m' },
+                { ssid: 'Hidden Network 4', signal: -76, security: 'WPA2', channel: 11, bssid: 'ca:dd:6a:58:80:47', distance: '61.1m' }
+            ];
+
+            // 기존 해당 위치 데이터 삭제
+            measurementData = measurementData.filter(data => data.location !== currentLocation);
+
+            realNetworks.forEach(network => {
+                const measurement = {
+                    timestamp: timestamp,
+                    location: currentLocation,
+                    ssid: network.ssid,
+                    signal: network.signal,
+                    security: network.security,
+                    channel: network.channel,
+                    measurer: measurer,
+                    notes: `실제 측정 데이터 (BSSID: ${network.bssid}, 거리: ${network.distance})`,
+                    riskLevel: calculateRiskLevel(network.security, network.signal)
+                };
+                measurementData.push(measurement);
+            });
+
+            saveData();
+            updateStatistics();
+            renderTable();
+            
+            alert(`3층 실험실 실제 WiFi 데이터 ${realNetworks.length}개가 측정 데이터에 추가되었습니다.`);
+        }
 
         document.getElementById('customLocation').addEventListener('input', function() {
             if (this.value) {
@@ -1221,90 +1274,49 @@ WiFi 보안 분석기 사용법:
             return stats;
         }
 
-        // 실제 데이터 기반 분석 리포트 생성
-        function generateRealDataAnalysis() {
+        // 분석 리포트 생성
+        function generateAnalysisReport() {
+            const stats = calculateAdvancedStats();
+            
+            if (measurementData.length === 0) {
+                alert('분석할 데이터가 없습니다.');
+                return;
+            }
+            
             const report = `
-📊 실제 WiFi 스캔 데이터 분석 리포트
+WiFi 보안 분석 리포트
 생성일시: ${new Date().toLocaleString('ko-KR')}
+총 측정 네트워크: ${measurementData.length}개
 
-=== 측정 위치별 분석 ===
+=== 보안 현황 ===
+${Object.entries(stats.securityStats).map(([security, count]) => 
+    `${security}: ${count}개 (${Math.round(count/measurementData.length*100)}%)`
+).join('\n')}
 
-🏫 3-5교실 분석:
-• 총 네트워크: 15개 발견
-• 보안 현황: WPA2 14개 (93.3%), Open 1개 (6.7%)
-• 신호 강도: -30dBm ~ -89dBm (평균: -67dBm)
-• 주요 발견:
-  - 매우 강한 신호: baramyhome (-30dBm, 거리 0.3m)
-  - 보안 위험: iptime_extender (Open 네트워크)
-  - 채널 분포: 2.4GHz 9개, 5GHz 6개
+=== 신호 강도 통계 ===
+최강 신호: ${stats.signalStats.max} dBm
+최약 신호: ${stats.signalStats.min} dBm
+평균 신호: ${stats.signalStats.avg} dBm
 
-🧪 3층실험실 분석:
-• 총 네트워크: 18개 발견 (숨겨진 네트워크 3개 포함)
-• 보안 현황: WPA2 18개 (100%)
-• 신호 강도: -30dBm ~ -88dBm (평균: -72dBm)
-• 주요 발견:
-  - 매우 강한 신호: baramyhome (-30dBm, 거지 0.3m)
-  - IoT 기기: [floor a/c] Samsung (에어컨)
-  - 프린터: DIRECT-2B C51x Series
-
-=== 보안 위험 분석 ===
-
-🔴 높은 위험:
-• iptime_extender (3-5교실): Open 네트워크, 즉시 보안 설정 필요
-
-🟡 보통 위험:
-• *hidden* 네트워크들: SSID 숨김으로 의심스러운 활동 가능성
-• 매우 강한 신호 (-30dBm): 근거리 개인 기기로 보안 주의 필요
-
-🟢 양호:
-• 대부분 WPA2 보안 적용 (96% 이상)
-• ISP 제공 공유기들 (U+Net, SK WiFi, KT GiGA) 적절한 보안 수준
-
-=== 네트워크 환경 분석 ===
-
-📡 채널 사용 현황:
-• 2.4GHz 대역: 채널 1, 5, 6, 7, 8, 9, 10, 11 사용
-• 5GHz 대역: 채널 36, 40, 44, 149, 153 사용
-• 간섭 예상 구역: 채널 1, 6 (다중 네트워크 사용)
-
-🏢 공간별 특성:
-• 3-5교실: 가정용 공유기가 주변에 많음 (거주지역 인접)
-• 3층실험실: 더 다양한 기기 유형 (에어컨, 프린터 등)
+=== 위험도 평가 ===
+높은 위험: ${measurementData.filter(d => d.riskLevel === 'high').length}개
+보통 위험: ${measurementData.filter(d => d.riskLevel === 'medium').length}개
+낮은 위험: ${measurementData.filter(d => d.riskLevel === 'low').length}개
 
 === 권고사항 ===
-
-즉시 조치 필요:
-• iptime_extender 네트워크 보안 설정 강화
-• 숨겨진 네트워크들의 정체 확인 및 관리
-
-개선 권장:
-• 채널 1, 6 사용 네트워크들의 분산 배치 검토
-• IoT 기기들의 보안 업데이트 상태 점검
-• 매우 강한 신호의 개인 기기들에 대한 보안 교육
-
-지속 모니터링:
-• 정기적인 WiFi 환경 스캔 (월 1회 권장)
-• 새로운 위험 네트워크 발견 시 즉시 대응
-• 학생/교직원 대상 WiFi 보안 교육 실시
+${generateRecommendations(stats)}
             `;
-
+            
             // 새 창에서 리포트 표시
             const reportWindow = window.open('', '_blank');
             reportWindow.document.write(`
                 <html>
-                    <head>
-                        <title>실제 WiFi 스캔 데이터 분석 리포트</title>
-                        <style>
-                            body { font-family: monospace; white-space: pre-wrap; padding: 20px; line-height: 1.6; }
-                            h1 { color: #4c63d2; border-bottom: 2px solid #e0e8ff; padding-bottom: 10px; }
-                        </style>
-                    </head>
-                    <body>
-                        <h1>📊 실제 WiFi 스캔 데이터 분석 리포트</h1>
+                    <head><title>WiFi 보안 분석 리포트</title></head>
+                    <body style="font-family: monospace; white-space: pre-wrap; padding: 20px;">
                         ${report}
                         <br><br>
-                        <button onclick="window.print()" style="background: #4c63d2; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">📄 인쇄</button>
-                        <button onclick="window.close()" style="background: #6b7280; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">❌ 닫기</button>
+                        <button onclick="window.print()">인쇄</button>
+                        <button onclick="window.close()">닫기</button>
                     </body>
                 </html>
             `);
